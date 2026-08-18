@@ -1,0 +1,20 @@
+.navegacion-temporal {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding: 1rem;
+  background-color: var(--color-fondo-alt);
+  border-bottom: 1px solid var(--color-borde);
+}
+
+.navegacion-temporal a {
+  color: var(--color-secundario);
+  text-decoration: none;
+  font-family: var(--fuente-base);
+  font-size: 0.9rem;
+}
+
+.navegacion-temporal a:hover {
+  color: var(--color-primario);
+  text-decoration: underline;
+}

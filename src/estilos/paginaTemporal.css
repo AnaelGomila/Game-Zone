@@ -1,0 +1,29 @@
+/*
+  Estilo compartido para las pantallas que todavía son placeholders
+  (sin contenido real). Todas las páginas lo importan mientras se van
+  completando en partes futuras. Cuando una pantalla se desarrolle de
+  verdad, va a tener su propio archivo .css y va a dejar de usar este.
+*/
+
+.pagina-temporal {
+  min-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 2rem;
+  color: var(--color-texto);
+  font-family: var(--fuente-base);
+  text-align: center;
+}
+
+.pagina-temporal h1 {
+  color: var(--color-primario);
+  margin: 0;
+}
+
+.pagina-temporal p {
+  color: var(--color-texto-secundario);
+  margin: 0;
+}
