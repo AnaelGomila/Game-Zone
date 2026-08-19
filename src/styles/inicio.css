@@ -1,0 +1,38 @@
+.inicio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  min-height: 60vh;
+  padding: 2rem;
+  text-align: center;
+  font-family: var(--fuente-base);
+  color: var(--color-texto);
+}
+
+.inicio h1 {
+  color: var(--color-primario);
+  font-size: 2.2rem;
+  margin: 0;
+}
+
+.inicio p {
+  color: var(--color-texto-secundario);
+  max-width: 480px;
+}
+
+.inicio-boton {
+  display: inline-block;
+  margin-top: 0.5rem;
+  padding: 0.7rem 1.6rem;
+  border-radius: var(--radio-borde);
+  background-color: var(--color-primario);
+  color: var(--color-fondo);
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.inicio-boton:hover {
+  background-color: var(--color-primario-hover);
+}

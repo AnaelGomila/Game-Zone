@@ -1,0 +1,81 @@
+/*
+  Estilos compartidos por formularios de una sola columna dentro de una
+  pantalla completa (no un modal): SugerirJuego por ahora. Reusa las
+  mismas variables de color que el resto de la app.
+*/
+.formulario-simple {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 1.5rem;
+  font-family: var(--fuente-base);
+  color: var(--color-texto);
+}
+
+.formulario-simple h1 {
+  color: var(--color-primario);
+}
+
+.formulario-simple-ayuda {
+  color: var(--color-texto-secundario);
+  font-size: 0.85rem;
+  margin-top: 0.3rem;
+}
+
+.formulario-simple form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  background-color: var(--color-fondo-alt);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-borde);
+  padding: 1.4rem;
+  margin-top: 1rem;
+}
+
+.formulario-simple label {
+  font-size: 0.85rem;
+  color: var(--color-texto-secundario);
+  margin-top: 0.5rem;
+}
+
+.formulario-simple input,
+.formulario-simple textarea {
+  padding: 0.5rem 0.6rem;
+  border-radius: var(--radio-borde);
+  border: 1px solid var(--color-borde);
+  background-color: var(--color-fondo);
+  color: var(--color-texto);
+  font-family: var(--fuente-base);
+  resize: vertical;
+}
+
+.formulario-simple input:focus,
+.formulario-simple textarea:focus {
+  outline: 2px solid var(--color-secundario);
+}
+
+.formulario-simple button {
+  margin-top: 1.2rem;
+  padding: 0.6rem;
+  border: none;
+  border-radius: var(--radio-borde);
+  background-color: var(--color-primario);
+  color: var(--color-fondo);
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.formulario-simple button:hover {
+  background-color: var(--color-primario-hover);
+}
+
+.formulario-simple button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.formulario-simple-error {
+  color: var(--color-error);
+  font-size: 0.85rem;
+  margin: 0.4rem 0 0;
+}

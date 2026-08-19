@@ -1,60 +1,72 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../contexto/ContextoAuth';
+import { useAlerta } from '../contexto/ContextoAlerta';
+import {
+  useValidacion,
+  requerido,
+  emailValido,
+  longitudMinima,
+  coincideCon,
+} from '../hooks/useValidacion';
 import '../styles/formularioAuth.css';
 
+/*
+  Registro — Parte 6: mismo cambio que Login, ahora usa useValidacion y
+  useAlerta. La regla "contrasena !== confirmarContrasena" se arma con
+  coincideCon(contrasena) en vez de un if a mano.
+*/
 function Registro() {
   const { registrarse } = useAuth();
+  const { mostrarAlerta } = useAlerta();
+  const { errores, validarFormulario } = useValidacion();
 
   const [nombre, setNombre] = useState('');
   const [email, setEmail] = useState('');
   const [contrasena, setContrasena] = useState('');
   const [confirmarContrasena, setConfirmarContrasena] = useState('');
-  const [error, setError] = useState('');
+  const [errorRegistro, setErrorRegistro] = useState('');
   const [mensajeExito, setMensajeExito] = useState('');
   const [enviando, setEnviando] = useState(false);
 
   async function manejarEnvio(evento) {
     evento.preventDefault();
-    setError('');
+    setErrorRegistro('');
     setMensajeExito('');
 
-    // Validación manual y simple, igual que en Login. El hook useValidacion
-    // reusable se arma en el paso dedicado a validación de formularios.
-    if (!nombre || !email || !contrasena || !confirmarContrasena) {
-      setError('Completá todos los campos.');
-      return;
-    }
+    const esValido = validarFormulario({
+      nombre: { valor: nombre, reglas: [requerido('Ingresá tu nombre')] },
+      email: { valor: email, reglas: [requerido('Ingresá tu email'), emailValido()] },
+      contrasena: {
+        valor: contrasena,
+        reglas: [requerido('Ingresá una contraseña'), longitudMinima(6)],
+      },
+      confirmarContrasena: {
+        valor: confirmarContrasena,
+        reglas: [requerido('Confirmá tu contraseña'), coincideCon(contrasena, 'Las contraseñas no coinciden')],
+      },
+    });
 
-    if (contrasena.length < 6) {
-      setError('La contraseña debe tener al menos 6 caracteres.');
-      return;
-    }
-
-    if (contrasena !== confirmarContrasena) {
-      setError('Las contraseñas no coinciden.');
-      return;
-    }
+    if (!esValido) return;
 
     setEnviando(true);
-    const { error: errorRegistro } = await registrarse(nombre, email, contrasena);
+    const { error } = await registrarse(nombre, email, contrasena);
     setEnviando(false);
 
-    if (errorRegistro) {
-      setError(errorRegistro.message);
+    if (error) {
+      setErrorRegistro(error.message);
+      mostrarAlerta(error.message, 'error');
       return;
     }
 
-    // No redirigimos automáticamente: si en Supabase quedó activa la
-    // confirmación por email, el usuario todavía no puede loguearse hasta
-    // confirmar. Le mostramos un mensaje y que vaya a /login cuando pueda.
     setMensajeExito('Cuenta creada. Ya podés iniciar sesión.');
+    mostrarAlerta('Cuenta creada con éxito.', 'exito');
   }
 
   return (
     <div className="formulario-auth">
       <h1>Crear cuenta</h1>
-      <form onSubmit={manejarEnvio}>
+      <form onSubmit={manejarEnvio} noValidate>
         <label htmlFor="nombre">Nombre</label>
         <input
           id="nombre"
@@ -62,6 +74,7 @@ function Registro() {
           value={nombre}
           onChange={(evento) => setNombre(evento.target.value)}
         />
+        {errores.nombre && <p className="formulario-auth-error">{errores.nombre}</p>}
 
         <label htmlFor="email">Email</label>
         <input
@@ -70,6 +83,7 @@ function Registro() {
           value={email}
           onChange={(evento) => setEmail(evento.target.value)}
         />
+        {errores.email && <p className="formulario-auth-error">{errores.email}</p>}
 
         <label htmlFor="contrasena">Contraseña</label>
         <input
@@ -78,6 +92,9 @@ function Registro() {
           value={contrasena}
           onChange={(evento) => setContrasena(evento.target.value)}
         />
+        {errores.contrasena && (
+          <p className="formulario-auth-error">{errores.contrasena}</p>
+        )}
 
         <label htmlFor="confirmarContrasena">Confirmar contraseña</label>
         <input
@@ -86,8 +103,11 @@ function Registro() {
           value={confirmarContrasena}
           onChange={(evento) => setConfirmarContrasena(evento.target.value)}
         />
+        {errores.confirmarContrasena && (
+          <p className="formulario-auth-error">{errores.confirmarContrasena}</p>
+        )}
 
-        {error && <p className="formulario-auth-error">{error}</p>}
+        {errorRegistro && <p className="formulario-auth-error">{errorRegistro}</p>}
         {mensajeExito && <p className="formulario-auth-exito">{mensajeExito}</p>}
 
         <button type="submit" disabled={enviando}>

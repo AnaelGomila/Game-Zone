@@ -1,0 +1,113 @@
+.catalogo {
+  padding: 1.5rem;
+  font-family: var(--fuente-base);
+  color: var(--color-texto);
+}
+
+.catalogo h1 {
+  color: var(--color-primario);
+  margin-bottom: 0.5rem;
+}
+
+.catalogo-buscador {
+  display: flex;
+  gap: 0.6rem;
+  margin: 1rem 0 0.5rem;
+  flex-wrap: wrap;
+}
+
+.catalogo-buscador input {
+  flex: 1;
+  min-width: 200px;
+  padding: 0.5rem 0.7rem;
+  border-radius: var(--radio-borde);
+  border: 1px solid var(--color-borde);
+  background-color: var(--color-fondo-alt);
+  color: var(--color-texto);
+  font-family: var(--fuente-base);
+}
+
+.catalogo-buscador input:focus {
+  outline: 2px solid var(--color-secundario);
+}
+
+.catalogo-buscador button {
+  padding: 0.5rem 1rem;
+  border-radius: var(--radio-borde);
+  border: none;
+  background-color: var(--color-primario);
+  color: var(--color-fondo);
+  font-weight: bold;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.catalogo-buscador button:hover {
+  background-color: var(--color-primario-hover);
+}
+
+.catalogo-buscador button[type='button'] {
+  background-color: transparent;
+  border: 1px solid var(--color-borde);
+  color: var(--color-texto-secundario);
+  font-weight: normal;
+}
+
+.catalogo-buscador button[type='button']:hover {
+  border-color: var(--color-secundario);
+  color: var(--color-secundario);
+}
+
+.catalogo-resultado-busqueda {
+  color: var(--color-texto-secundario);
+  font-size: 0.85rem;
+  margin: 0 0 0.5rem;
+}
+
+.catalogo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1.2rem;
+  margin-top: 1.5rem;
+}
+
+.catalogo-sin-resultados {
+  color: var(--color-texto-secundario);
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.catalogo-error {
+  color: var(--color-error);
+  font-family: var(--fuente-base);
+}
+
+.catalogo-paginacion {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.2rem;
+  margin-top: 2rem;
+  font-family: var(--fuente-base);
+  color: var(--color-texto-secundario);
+}
+
+.catalogo-paginacion button {
+  padding: 0.5rem 1rem;
+  border-radius: var(--radio-borde);
+  border: 1px solid var(--color-borde);
+  background-color: var(--color-fondo-alt);
+  color: var(--color-texto);
+  font-family: var(--fuente-base);
+  cursor: pointer;
+}
+
+.catalogo-paginacion button:hover:not(:disabled) {
+  border-color: var(--color-secundario);
+  color: var(--color-secundario);
+}
+
+.catalogo-paginacion button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}

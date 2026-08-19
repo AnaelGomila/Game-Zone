@@ -1,0 +1,54 @@
+/*
+  Estilos mínimos para formularios controlados dentro de un <Modal>.
+  Reutiliza las variables de color globales, igual que formularioAuth.css,
+  pero sin el padding/max-width propios de una pantalla completa (el
+  Modal ya se encarga de eso).
+*/
+.formulario-auth-modal {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.formulario-auth-modal label {
+  font-size: 0.85rem;
+  color: var(--color-texto-secundario);
+  margin-top: 0.5rem;
+}
+
+.formulario-auth-modal input,
+.formulario-auth-modal select,
+.formulario-auth-modal textarea {
+  padding: 0.5rem 0.6rem;
+  border-radius: var(--radio-borde);
+  border: 1px solid var(--color-borde);
+  background-color: var(--color-fondo);
+  color: var(--color-texto);
+  font-family: var(--fuente-base);
+}
+
+.formulario-auth-modal input:focus,
+.formulario-auth-modal select:focus,
+.formulario-auth-modal textarea:focus {
+  outline: 2px solid var(--color-secundario);
+}
+
+.formulario-auth-modal button {
+  margin-top: 1rem;
+  padding: 0.6rem;
+  border: none;
+  border-radius: var(--radio-borde);
+  background-color: var(--color-primario);
+  color: var(--color-fondo);
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.formulario-auth-modal button:hover {
+  background-color: var(--color-primario-hover);
+}
+
+.formulario-auth-modal button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

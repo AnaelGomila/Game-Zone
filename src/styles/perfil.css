@@ -1,0 +1,61 @@
+.perfil {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 1.5rem;
+  font-family: var(--fuente-base);
+  color: var(--color-texto);
+}
+
+.perfil h1 {
+  color: var(--color-primario);
+}
+
+.perfil-tarjeta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  padding: 1.4rem;
+  background-color: var(--color-fondo-alt);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-borde);
+}
+
+.perfil-dato {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--color-borde);
+  padding-bottom: 0.6rem;
+  font-size: 0.95rem;
+}
+
+.perfil-etiqueta {
+  color: var(--color-texto-secundario);
+}
+
+.perfil-rol-admin {
+  color: var(--color-primario);
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+}
+
+.perfil-rol-usuario {
+  color: var(--color-secundario);
+  text-transform: uppercase;
+  font-size: 0.8rem;
+}
+
+.perfil-tarjeta button {
+  margin-top: 0.4rem;
+  padding: 0.6rem;
+  border: none;
+  border-radius: var(--radio-borde);
+  background-color: var(--color-primario);
+  color: var(--color-fondo);
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.perfil-tarjeta button:hover {
+  background-color: var(--color-primario-hover);
+}

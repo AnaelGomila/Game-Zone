@@ -1,9 +1,3 @@
-/*
-  Estilo compartido por Login y Registro: ambas son pantallas de
-  autenticación con la misma estructura (título, form, link de abajo),
-  así que comparten este archivo en vez de duplicar CSS.
-*/
-
 .formulario-auth {
   max-width: 360px;
   margin: 3rem auto;

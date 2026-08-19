@@ -1,12 +1,7 @@
 /*
-  Paleta de colores global del proyecto Game Zone.
-  Inspirada en gabinetes de arcade: fondo azul-tinta oscuro (el "gabinete"),
-  un amarillo cálido tipo marquesina de arcade como color primario,
-  y un celeste tipo pantalla CRT como color secundario.
-
-  Se importa una única vez en main.jsx y desde ahí queda disponible
-  en toda la app. Cada componente consume estas variables en su propio
-  archivo .css, nunca se define color "a mano" dentro de cada componente.
+  Paleta de colores global del proyecto Game Zone. Sin cambios respecto a
+  la Parte 1. Se incluye tal cual para que el ZIP de la Parte 6 quede
+  completo.
 */
 
 :root {

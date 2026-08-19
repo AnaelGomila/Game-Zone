@@ -2,18 +2,9 @@ import { createContext, useContext, useEffect, useState } from 'react';
 import { supabase } from '../servicios/supabaseClient';
 
 /*
-  ContextoAuth
-  ------------
-  Maneja la sesión de Supabase Auth para toda la app.
-
-  Separa dos cosas:
-  - "usuario": lo que devuelve Supabase Auth (id, email). Se sabe al toque.
-  - "perfil": la fila correspondiente en la tabla "usuarios" (nombre, rol).
-    Se busca en un segundo paso, apenas sabemos el id del usuario logueado.
-
-  "esAdmin" se calcula a partir del rol del perfil, y lo van a usar más
-  adelante las pantallas de administración para decidir si mostrar
-  el panel o no.
+  ContextoAuth — sin cambios respecto a la Parte 3. Se incluye acá tal
+  cual para que el ZIP de la Parte 6 quede completo y listo para copiar
+  directo a src/, sin tener que ir a buscar este archivo a un ZIP viejo.
 */
 
 const ContextoAuth = createContext(null);
@@ -23,8 +14,6 @@ export function ProveedorAuth({ children }) {
   const [perfil, setPerfil] = useState(null);
   const [cargando, setCargando] = useState(true);
 
-  // Al montar: revisa si ya hay sesión activa (ej: recargaste la página)
-  // y se suscribe a cambios futuros (login, logout, refresh de token).
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUsuario(session?.user ?? null);
@@ -38,8 +27,6 @@ export function ProveedorAuth({ children }) {
     return () => escucha.subscription.unsubscribe();
   }, []);
 
-  // Cada vez que cambia el usuario logueado, busca su perfil (nombre, rol)
-  // en la tabla "usuarios".
   useEffect(() => {
     if (!usuario) {
       setPerfil(null);
@@ -69,8 +56,6 @@ export function ProveedorAuth({ children }) {
   }
 
   async function registrarse(nombre, email, contrasena) {
-    // El "nombre" viaja en options.data: el trigger que creamos en Supabase
-    // lo lee de ahí para crear automáticamente la fila en "usuarios".
     const { error } = await supabase.auth.signUp({
       email,
       password: contrasena,

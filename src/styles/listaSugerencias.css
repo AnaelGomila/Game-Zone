@@ -1,0 +1,165 @@
+/*
+  Estilos compartidos por las listas de sugerencias: MisSugerencias
+  (usuario) y AdminSugerencias (admin). Cada fila es una tarjeta simple
+  con el estado como badge de color.
+*/
+.lista-sugerencias {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 1.5rem;
+  font-family: var(--fuente-base);
+  color: var(--color-texto);
+}
+
+.lista-sugerencias h1 {
+  color: var(--color-primario);
+}
+
+.lista-sugerencias-vacio {
+  color: var(--color-texto-secundario);
+  margin-top: 1.5rem;
+}
+
+/* Mismo estilo que .formulario-simple-error (formularioSimple.css), se
+   repite acá para no forzar un import cruzado entre hojas de estilo de
+   pantallas que no comparten nada más. */
+.formulario-simple-error {
+  color: var(--color-error);
+  font-size: 0.85rem;
+  margin: 0.4rem 0 0;
+}
+
+.tarjeta-sugerencia {
+  background-color: var(--color-fondo-alt);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-borde);
+  padding: 1rem 1.2rem;
+  margin-top: 1rem;
+}
+
+.tarjeta-sugerencia-encabezado {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+}
+
+.tarjeta-sugerencia-encabezado h2 {
+  margin: 0;
+  font-size: 1.05rem;
+  color: var(--color-texto);
+}
+
+.tarjeta-sugerencia-meta {
+  font-size: 0.8rem;
+  color: var(--color-texto-secundario);
+  margin: 0.3rem 0 0;
+}
+
+.tarjeta-sugerencia-descripcion {
+  font-size: 0.9rem;
+  margin: 0.6rem 0 0;
+}
+
+.tarjeta-sugerencia-comentario {
+  font-size: 0.85rem;
+  color: var(--color-texto-secundario);
+  font-style: italic;
+  margin: 0.5rem 0 0;
+  border-left: 2px solid var(--color-borde);
+  padding-left: 0.6rem;
+}
+
+.badge-estado {
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.badge-estado-pendiente {
+  background-color: rgba(251, 191, 36, 0.15);
+  color: var(--color-advertencia);
+}
+
+.badge-estado-aprobado {
+  background-color: rgba(74, 222, 128, 0.15);
+  color: var(--color-exito);
+}
+
+.badge-estado-rechazado {
+  background-color: rgba(248, 113, 113, 0.15);
+  color: var(--color-error);
+}
+
+.tarjeta-sugerencia-acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.8rem;
+}
+
+.tarjeta-sugerencia-acciones button {
+  padding: 0.35rem 0.7rem;
+  border-radius: var(--radio-borde);
+  border: 1px solid var(--color-borde);
+  background-color: transparent;
+  color: var(--color-texto);
+  font-family: var(--fuente-base);
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.tarjeta-sugerencia-acciones button:hover {
+  border-color: var(--color-secundario);
+  color: var(--color-secundario);
+}
+
+.tarjeta-sugerencia-acciones .boton-aprobar {
+  border-color: var(--color-exito);
+  color: var(--color-exito);
+}
+
+.tarjeta-sugerencia-acciones .boton-aprobar:hover {
+  background-color: var(--color-exito);
+  color: var(--color-fondo);
+}
+
+.tarjeta-sugerencia-acciones .boton-rechazar,
+.tarjeta-sugerencia-acciones .boton-eliminar {
+  border-color: var(--color-error);
+  color: var(--color-error);
+}
+
+.tarjeta-sugerencia-acciones .boton-rechazar:hover,
+.tarjeta-sugerencia-acciones .boton-eliminar:hover {
+  background-color: var(--color-error);
+  color: var(--color-fondo);
+}
+
+.filtros-estado {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+
+.filtros-estado button {
+  padding: 0.4rem 0.8rem;
+  border-radius: var(--radio-borde);
+  border: 1px solid var(--color-borde);
+  background-color: transparent;
+  color: var(--color-texto-secundario);
+  font-family: var(--fuente-base);
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.filtros-estado button.activo {
+  border-color: var(--color-primario);
+  color: var(--color-primario);
+  font-weight: bold;
+}

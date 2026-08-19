@@ -20,6 +20,13 @@
   text-decoration: underline;
 }
 
+/* Parte 6: los links de admin se distinguen visualmente del resto, para
+   que quede claro que son una zona aparte (solo visibles para esAdmin). */
+.navegacion-link-admin {
+  color: var(--color-primario) !important;
+  font-weight: bold;
+}
+
 .navegacion-boton-salir {
   margin-left: auto;
   padding: 0.35rem 0.7rem;

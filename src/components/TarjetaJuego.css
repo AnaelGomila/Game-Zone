@@ -1,0 +1,96 @@
+.tarjeta-juego {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-fondo-alt);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-borde);
+  overflow: hidden;
+  text-decoration: none;
+  color: var(--color-texto);
+  font-family: var(--fuente-base);
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+
+.tarjeta-juego:hover {
+  transform: translateY(-3px);
+  border-color: var(--color-secundario);
+}
+
+.tarjeta-juego img {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+}
+
+.tarjeta-juego-sin-imagen {
+  width: 100%;
+  height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-fondo);
+  color: var(--color-texto-secundario);
+  font-size: 0.8rem;
+}
+
+.tarjeta-juego-cuerpo {
+  padding: 0.7rem 0.8rem;
+}
+
+.tarjeta-juego h2 {
+  font-size: 1rem;
+  margin: 0 0 0.3rem;
+  color: var(--color-primario);
+}
+
+.tarjeta-juego p {
+  font-size: 0.8rem;
+  color: var(--color-texto-secundario);
+  margin: 0;
+}
+
+.tarjeta-juego-rating {
+  margin-top: 0.4rem;
+  color: var(--color-secundario) !important;
+}
+
+/* Parte 6: contenedor cuando se pasa el prop `pie` (usado en Favoritos). */
+.tarjeta-juego-con-pie {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-fondo-alt);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-borde);
+  overflow: hidden;
+}
+
+.tarjeta-juego-con-pie .tarjeta-juego {
+  border: none;
+  border-radius: 0;
+}
+
+.tarjeta-juego-con-pie .tarjeta-juego:hover {
+  transform: none;
+}
+
+.tarjeta-juego-pie {
+  padding: 0.6rem 0.8rem;
+  border-top: 1px solid var(--color-borde);
+}
+
+.tarjeta-juego-pie button {
+  width: 100%;
+  padding: 0.4rem;
+  border: 1px solid var(--color-error);
+  border-radius: var(--radio-borde);
+  background-color: transparent;
+  color: var(--color-error);
+  font-family: var(--fuente-base);
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.tarjeta-juego-pie button:hover {
+  background-color: var(--color-error);
+  color: var(--color-fondo);
+}

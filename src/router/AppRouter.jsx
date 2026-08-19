@@ -14,13 +14,15 @@ import AdminSugerencias from '../pages/AdminSugerencias';
 import NoEncontrada from '../pages/NoEncontrada';
 
 import RutaPrivada from './RutaPrivada';
+import RutaAdmin from './RutaAdmin';
 
 /*
   AppRouter
   ---------
-  Define todas las rutas de la aplicación en un solo lugar. Las rutas
-  privadas están envueltas en <RutaPrivada>, que hoy no bloquea nada
-  pero en la Parte 3 va a chequear la sesión de Supabase Auth.
+  Parte 6: único cambio respecto a la Parte 3 es que /admin/usuarios y
+  /admin/sugerencias ahora usan <RutaAdmin> en vez de <RutaPrivada>, para
+  que de verdad estén restringidas a usuarios con rol 'admin' (ver
+  RutaAdmin.jsx para el detalle del bug que esto corrige).
 */
 function AppRouter() {
   return (
@@ -31,7 +33,7 @@ function AppRouter() {
       <Route path="/registro" element={<Registro />} />
       <Route path="/catalogo" element={<Catalogo />} />
 
-      {/* --- Rutas privadas --- */}
+      {/* --- Rutas privadas (cualquier usuario logueado) --- */}
       <Route
         path="/juego/:id"
         element={
@@ -72,20 +74,22 @@ function AppRouter() {
           </RutaPrivada>
         }
       />
+
+      {/* --- Rutas de admin (solo esAdmin) --- */}
       <Route
         path="/admin/usuarios"
         element={
-          <RutaPrivada>
+          <RutaAdmin>
             <AdminUsuarios />
-          </RutaPrivada>
+          </RutaAdmin>
         }
       />
       <Route
         path="/admin/sugerencias"
         element={
-          <RutaPrivada>
+          <RutaAdmin>
             <AdminSugerencias />
-          </RutaPrivada>
+          </RutaAdmin>
         }
       />
 
