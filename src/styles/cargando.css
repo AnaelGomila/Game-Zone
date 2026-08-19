@@ -1,0 +1,6 @@
+.cargando {
+  text-align: center;
+  margin-top: 2rem;
+  color: var(--color-texto-secundario);
+  font-family: var(--fuente-base);
+}

@@ -1,0 +1,91 @@
+/*
+  Estilo compartido por Login y Registro: ambas son pantallas de
+  autenticación con la misma estructura (título, form, link de abajo),
+  así que comparten este archivo en vez de duplicar CSS.
+*/
+
+.formulario-auth {
+  max-width: 360px;
+  margin: 3rem auto;
+  padding: 2rem;
+  background-color: var(--color-fondo-alt);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-borde);
+  font-family: var(--fuente-base);
+  color: var(--color-texto);
+}
+
+.formulario-auth h1 {
+  color: var(--color-primario);
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.formulario-auth form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.formulario-auth label {
+  font-size: 0.85rem;
+  color: var(--color-texto-secundario);
+  margin-top: 0.5rem;
+}
+
+.formulario-auth input {
+  padding: 0.5rem 0.6rem;
+  border-radius: var(--radio-borde);
+  border: 1px solid var(--color-borde);
+  background-color: var(--color-fondo);
+  color: var(--color-texto);
+  font-family: var(--fuente-base);
+}
+
+.formulario-auth input:focus {
+  outline: 2px solid var(--color-secundario);
+}
+
+.formulario-auth button {
+  margin-top: 1.2rem;
+  padding: 0.6rem;
+  border: none;
+  border-radius: var(--radio-borde);
+  background-color: var(--color-primario);
+  color: var(--color-fondo);
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.formulario-auth button:hover {
+  background-color: var(--color-primario-hover);
+}
+
+.formulario-auth button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.formulario-auth-error {
+  color: var(--color-error);
+  font-size: 0.85rem;
+  margin: 0.4rem 0 0;
+}
+
+.formulario-auth-exito {
+  color: var(--color-exito);
+  font-size: 0.85rem;
+  margin: 0.4rem 0 0;
+}
+
+.formulario-auth p {
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--color-texto-secundario);
+  margin-top: 1.2rem;
+}
+
+.formulario-auth a {
+  color: var(--color-secundario);
+}

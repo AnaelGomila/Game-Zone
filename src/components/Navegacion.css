@@ -1,6 +1,7 @@
 .navegacion-temporal {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   gap: 1rem;
   padding: 1rem;
   background-color: var(--color-fondo-alt);
@@ -17,4 +18,21 @@
 .navegacion-temporal a:hover {
   color: var(--color-primario);
   text-decoration: underline;
+}
+
+.navegacion-boton-salir {
+  margin-left: auto;
+  padding: 0.35rem 0.7rem;
+  border: 1px solid var(--color-error);
+  border-radius: var(--radio-borde);
+  background-color: transparent;
+  color: var(--color-error);
+  font-family: var(--fuente-base);
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.navegacion-boton-salir:hover {
+  background-color: var(--color-error);
+  color: var(--color-fondo);
 }

@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom';
-import '../estilos/paginaTemporal.css';
+import '../styles/paginaTemporal.css';
 
 function DetalleJuego() {
   // useParams lee el parámetro dinámico de la URL, definido en la ruta

@@ -1,4 +1,4 @@
-import '../estilos/paginaTemporal.css';
+import '../styles/paginaTemporal.css';
 
 function AdminUsuarios() {
   return (
