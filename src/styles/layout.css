@@ -1,0 +1,22 @@
+/*
+  layout.css — nuevo en la Parte 7.
+  ------------------------------------
+  Estructura general de la app: barra superior fija arriba, debajo una
+  fila con la sidebar (ancho fijo) + el contenido de la pantalla actual
+  (flex, ocupa el resto), y el footer (Pie) abajo de todo, ancho completo.
+*/
+.layout-app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.layout-cuerpo {
+  display: flex;
+  flex: 1;
+}
+
+.layout-contenido {
+  flex: 1;
+  min-width: 0; /* evita que el contenido empuje el ancho total con imágenes/grids */
+}

@@ -1,0 +1,37 @@
+.sidebar {
+  width: 200px;
+  flex-shrink: 0;
+  position: sticky;
+  top: 57px; /* alto aproximado de la barra superior, para que quede pegada justo debajo */
+  height: calc(100vh - 57px);
+  overflow-y: auto;
+  background-color: var(--color-fondo-alt);
+  border-right: 1px solid var(--color-borde);
+  padding: 1rem 0.6rem;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.sidebar-nav a {
+  padding: 0.6rem 0.8rem;
+  border-radius: var(--radio-borde);
+  color: var(--color-texto-secundario);
+  text-decoration: none;
+  font-family: var(--fuente-base);
+  font-size: 0.9rem;
+}
+
+.sidebar-nav a:hover {
+  background-color: var(--color-fondo);
+  color: var(--color-texto);
+}
+
+.sidebar-nav a.activo {
+  background-color: var(--color-fondo);
+  color: var(--color-primario);
+  font-weight: bold;
+}

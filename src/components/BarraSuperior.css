@@ -1,0 +1,74 @@
+.barra-superior {
+  position: sticky;
+  top: 0;
+  z-index: 300;
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  padding: 0.7rem 1.2rem;
+  background-color: var(--color-fondo-alt);
+  border-bottom: 1px solid var(--color-borde);
+  font-family: var(--fuente-base);
+}
+
+.barra-superior-logo {
+  color: var(--color-primario);
+  font-weight: bold;
+  font-size: 1.15rem;
+  text-decoration: none;
+  white-space: nowrap;
+  letter-spacing: 0.02em;
+}
+
+.barra-superior-buscador {
+  flex: 1;
+  max-width: 480px;
+  display: flex;
+  gap: 0.4rem;
+}
+
+.barra-superior-buscador input {
+  flex: 1;
+  padding: 0.45rem 0.7rem;
+  border-radius: var(--radio-borde);
+  border: 1px solid var(--color-borde);
+  background-color: var(--color-fondo);
+  color: var(--color-texto);
+  font-family: var(--fuente-base);
+}
+
+.barra-superior-buscador input:focus {
+  outline: 2px solid var(--color-secundario);
+}
+
+.barra-superior-buscador button {
+  padding: 0.45rem 0.7rem;
+  border-radius: var(--radio-borde);
+  border: 1px solid var(--color-borde);
+  background-color: transparent;
+  color: var(--color-texto-secundario);
+  cursor: pointer;
+}
+
+.barra-superior-buscador button:hover {
+  border-color: var(--color-secundario);
+  color: var(--color-secundario);
+}
+
+.barra-superior-cuenta {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.barra-superior-link {
+  color: var(--color-secundario);
+  text-decoration: none;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.barra-superior-link:hover {
+  text-decoration: underline;
+}

@@ -49,9 +49,11 @@ export async function esFavorito(usuarioId, juegoId) {
 }
 
 // Agrega un juego a favoritos. `juego` es el objeto que devuelve la API
-// de RAWG (o lo que ya tiene DetalleJuego en memoria) — se guarda solo lo
-// que necesita <TarjetaJuego> para no inflar la fila con datos que no se
-// van a usar en la grilla de Favoritos.
+// de RAWG (o lo que ya tiene DetalleJuego en memoria) — se guarda lo que
+// necesita <TarjetaJuego>, incluido lo que usa el panel de hover agregado
+// en la Parte 7 (released, platforms, metacritic), para que un juego
+// favorito muestre los mismos datos al pasar el cursor que uno visto
+// desde el Catálogo.
 export async function agregarFavorito(usuarioId, juego) {
   const juegoData = {
     id: juego.id,
@@ -59,6 +61,9 @@ export async function agregarFavorito(usuarioId, juego) {
     background_image: juego.background_image,
     genres: juego.genres,
     rating: juego.rating,
+    released: juego.released,
+    platforms: juego.platforms,
+    metacritic: juego.metacritic,
   };
 
   const { data, error } = await supabase

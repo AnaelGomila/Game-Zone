@@ -2,19 +2,25 @@ import { Link } from 'react-router-dom';
 import './TarjetaJuego.css';
 
 /*
-  TarjetaJuego — Parte 6: agrega el prop opcional `pie`.
-  ---------------------------------------------------------
-  Sin `pie` (el caso de Catalogo.jsx, que no cambia), se comporta
-  EXACTAMENTE igual que en la Parte 4: un <Link> completo a /juego/:id.
+  TarjetaJuego — Parte 7: agrega el panel de hover.
+  ------------------------------------------------------
+  Al pasar el cursor por arriba de la tarjeta aparece un panel con datos
+  que no se ven en la tarjeta "cerrada": fecha de lanzamiento, plataformas,
+  puntaje de Metacritic y género. Todos estos datos ya vienen en la
+  respuesta del listado de RAWG (/games) — no hace falta pedir el detalle
+  del juego para mostrarlos, se confirmó revisando la respuesta real de la
+  API antes de implementar esto (ver el doc de la Parte 7).
 
-  Con `pie` (el caso nuevo de Favoritos.jsx), se envuelve en un <div> que
-  agrega debajo del Link el contenido de `pie` — pensado para el botón
-  "Quitar de favoritos", que no puede ir DENTRO del <Link> (un botón
-  dentro de un link anidaría elementos interactivos, inválido en HTML y
-  problemático para navegación por teclado).
+  Es un overlay puramente CSS (opacity + visibility en :hover, sin estado
+  de React): más simple y no agrega un listener por tarjeta en una grilla
+  que puede tener 20 juegos a la vez.
 */
 function TarjetaJuego({ juego, pie }) {
   const generos = juego.genres?.map((genero) => genero.name).join(', ');
+  const plataformas = juego.platforms
+    ?.map((entrada) => entrada.platform?.name)
+    .filter(Boolean)
+    .join(', ');
 
   const contenido = (
     <>
@@ -23,6 +29,25 @@ function TarjetaJuego({ juego, pie }) {
       ) : (
         <div className="tarjeta-juego-sin-imagen">Sin imagen</div>
       )}
+
+      <div className="tarjeta-juego-hover">
+        <p>
+          <strong>Lanzamiento:</strong> {juego.released || 'Sin confirmar'}
+        </p>
+        {plataformas && (
+          <p>
+            <strong>Plataformas:</strong> {plataformas}
+          </p>
+        )}
+        {generos && (
+          <p>
+            <strong>Género:</strong> {generos}
+          </p>
+        )}
+        <p>
+          <strong>Metacritic:</strong> {juego.metacritic ?? 'Sin puntaje'}
+        </p>
+      </div>
 
       <div className="tarjeta-juego-cuerpo">
         <h2>{juego.name}</h2>

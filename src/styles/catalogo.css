@@ -9,59 +9,59 @@
   margin-bottom: 0.5rem;
 }
 
-.catalogo-buscador {
+/* Parte 7: reemplaza al viejo .catalogo-buscador (el buscador se mudó a
+   la barra superior). Estos son los dos <select> de orden/categoría. */
+.catalogo-filtros {
   display: flex;
-  gap: 0.6rem;
-  margin: 1rem 0 0.5rem;
+  gap: 1.2rem;
   flex-wrap: wrap;
+  margin: 1rem 0 0.5rem;
 }
 
-.catalogo-buscador input {
-  flex: 1;
-  min-width: 200px;
-  padding: 0.5rem 0.7rem;
+.catalogo-filtros label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  font-size: 0.8rem;
+  color: var(--color-texto-secundario);
+}
+
+.catalogo-filtros select {
+  padding: 0.45rem 0.6rem;
   border-radius: var(--radio-borde);
   border: 1px solid var(--color-borde);
   background-color: var(--color-fondo-alt);
   color: var(--color-texto);
   font-family: var(--fuente-base);
+  min-width: 180px;
 }
 
-.catalogo-buscador input:focus {
+.catalogo-filtros select:focus {
   outline: 2px solid var(--color-secundario);
-}
-
-.catalogo-buscador button {
-  padding: 0.5rem 1rem;
-  border-radius: var(--radio-borde);
-  border: none;
-  background-color: var(--color-primario);
-  color: var(--color-fondo);
-  font-weight: bold;
-  cursor: pointer;
-  white-space: nowrap;
-}
-
-.catalogo-buscador button:hover {
-  background-color: var(--color-primario-hover);
-}
-
-.catalogo-buscador button[type='button'] {
-  background-color: transparent;
-  border: 1px solid var(--color-borde);
-  color: var(--color-texto-secundario);
-  font-weight: normal;
-}
-
-.catalogo-buscador button[type='button']:hover {
-  border-color: var(--color-secundario);
-  color: var(--color-secundario);
 }
 
 .catalogo-resultado-busqueda {
   color: var(--color-texto-secundario);
   font-size: 0.85rem;
   margin: 0 0 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.catalogo-limpiar-busqueda {
+  padding: 0.15rem 0.5rem;
+  border-radius: var(--radio-borde);
+  border: 1px solid var(--color-borde);
+  background-color: transparent;
+  color: var(--color-secundario);
+  font-family: var(--fuente-base);
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+
+.catalogo-limpiar-busqueda:hover {
+  border-color: var(--color-secundario);
 }
 
 .catalogo-grid {

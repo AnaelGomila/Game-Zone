@@ -1,0 +1,72 @@
+.avatar-menu {
+  position: relative;
+}
+
+.avatar-circulo {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background-color: var(--color-secundario);
+  color: var(--color-fondo);
+  font-family: var(--fuente-base);
+  font-weight: bold;
+  font-size: 0.85rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar-circulo:hover {
+  background-color: var(--color-secundario-hover);
+}
+
+.avatar-desplegable {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  min-width: 200px;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-fondo-alt);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-borde);
+  padding: 0.4rem;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+  z-index: 200;
+}
+
+.avatar-desplegable a,
+.avatar-desplegable button {
+  text-align: left;
+  padding: 0.5rem 0.6rem;
+  border-radius: 6px;
+  border: none;
+  background: none;
+  color: var(--color-texto);
+  text-decoration: none;
+  font-family: var(--fuente-base);
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.avatar-desplegable a:hover,
+.avatar-desplegable button:hover {
+  background-color: var(--color-fondo);
+}
+
+.avatar-desplegable-admin {
+  color: var(--color-primario) !important;
+  font-weight: bold;
+}
+
+.avatar-desplegable-separador {
+  height: 1px;
+  background-color: var(--color-borde);
+  margin: 0.3rem 0.2rem;
+}
+
+.avatar-desplegable-salir {
+  color: var(--color-error) !important;
+}
