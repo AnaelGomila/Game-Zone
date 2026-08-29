@@ -9,8 +9,14 @@
   color: var(--color-texto);
 }
 
+/* Se fija un tamaño propio para este h1 (en vez de heredar el h1 global
+   de index.css, 2.4rem) porque el formulario es angosto (max-width:
+   360px) — un título tan grande ahí adentro quedaría desproporcionado. */
 .formulario-auth h1 {
   color: var(--color-primario);
+  font-size: 1.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
   margin-top: 0;
   margin-bottom: 1.5rem;
   text-align: center;
@@ -39,6 +45,7 @@
 
 .formulario-auth input:focus {
   outline: 2px solid var(--color-secundario);
+  border-color: var(--color-secundario);
 }
 
 .formulario-auth button {

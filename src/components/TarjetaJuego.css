@@ -14,7 +14,10 @@
 
 .tarjeta-juego:hover {
   transform: translateY(-3px);
-  border-color: var(--color-secundario);
+  border-color: var(--color-primario);
+  /* Parte 10: glow sutil con el color de marca al pasar el cursor, para
+     que la tarjeta "resalte" más que con un simple cambio de borde. */
+  box-shadow: 0 0 0 1px var(--color-primario), 0 8px 20px rgba(0, 0, 0, 0.4);
 }
 
 .tarjeta-juego img {
@@ -34,7 +37,13 @@
   font-size: 0.8rem;
 }
 
-/* Parte 7: panel de hover con datos extra, cubre la zona de la imagen. */
+/* Parte 7: panel de hover con datos extra, cubre la zona de la imagen.
+   Parte 10: el rgb(23, 24, 28, ...) es el mismo valor que --color-fondo
+   en formato rgb — va hardcodeado (no con var()) porque necesita el
+   canal alfa (0.92) para la transparencia, y las variables CSS no traen
+   los componentes separados para combinarlos así. Si se vuelve a
+   cambiar --color-fondo en variables.css, este valor también hay que
+   actualizarlo a mano. */
 .tarjeta-juego-hover {
   position: absolute;
   top: 0;
@@ -42,7 +51,7 @@
   right: 0;
   height: 140px;
   padding: 0.7rem 0.8rem;
-  background-color: rgba(18, 24, 43, 0.92);
+  background-color: rgba(23, 24, 28, 0.92);
   color: var(--color-texto);
   font-size: 0.75rem;
   display: flex;

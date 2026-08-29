@@ -1,3 +1,8 @@
+/*
+  Parte 10: la barra se agranda un poco (más padding vertical, logo más
+  grande) para que se note menos el espacio vacío de arriba, y se agrega
+  un borde inferior más marcado acorde al resto del rediseño.
+*/
 .barra-superior {
   position: sticky;
   top: 0;
@@ -5,16 +10,17 @@
   display: flex;
   align-items: center;
   gap: 1.2rem;
-  padding: 0.7rem 1.2rem;
+  padding: 1rem 1.5rem;
   background-color: var(--color-fondo-alt);
-  border-bottom: 1px solid var(--color-borde);
+  border-bottom: 2px solid var(--color-borde);
   font-family: var(--fuente-base);
 }
 
 .barra-superior-logo {
   color: var(--color-primario);
-  font-weight: bold;
-  font-size: 1.15rem;
+  font-weight: 800;
+  font-size: 1.4rem;
+  text-transform: uppercase;
   text-decoration: none;
   white-space: nowrap;
   letter-spacing: 0.02em;
@@ -29,7 +35,7 @@
 
 .barra-superior-buscador input {
   flex: 1;
-  padding: 0.45rem 0.7rem;
+  padding: 0.6rem 0.8rem;
   border-radius: var(--radio-borde);
   border: 1px solid var(--color-borde);
   background-color: var(--color-fondo);
@@ -39,10 +45,11 @@
 
 .barra-superior-buscador input:focus {
   outline: 2px solid var(--color-secundario);
+  border-color: var(--color-secundario);
 }
 
 .barra-superior-buscador button {
-  padding: 0.45rem 0.7rem;
+  padding: 0.6rem 0.8rem;
   border-radius: var(--radio-borde);
   border: 1px solid var(--color-borde);
   background-color: transparent;
@@ -53,6 +60,35 @@
 .barra-superior-buscador button:hover {
   border-color: var(--color-secundario);
   color: var(--color-secundario);
+}
+
+/* Parte 10: botón "Sorpréndeme" — ocupa el espacio libre entre el
+   buscador y la cuenta con una utilidad real (elegir un juego al azar),
+   en vez de agrandar el buscador de forma artificial. Se usa el color
+   primario (naranja) relleno, como un CTA, ya que es la acción más
+   "jugable" de la barra. */
+.barra-superior-al-azar {
+  flex-shrink: 0;
+  padding: 0.6rem 1rem;
+  border: 1px solid var(--color-primario);
+  border-radius: var(--radio-borde);
+  background-color: var(--color-primario);
+  color: var(--color-fondo);
+  font-family: var(--fuente-base);
+  font-weight: bold;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.barra-superior-al-azar:hover:not(:disabled) {
+  background-color: var(--color-primario-hover);
+  border-color: var(--color-primario-hover);
+}
+
+.barra-superior-al-azar:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .barra-superior-cuenta {

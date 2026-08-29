@@ -2,9 +2,24 @@
   index.css — reset mínimo global. No se había documentado antes porque
   seguía siendo el default de Vite (Parte 1: "App.jsx y main.jsx siguen
   siendo los que trae Vite por defecto"); acá queda con el mismo criterio
-  pero ajustado al fondo oscuro de la paleta de la Parte 1, para que no
-  aparezca un flash blanco antes de que carguen los estilos de cada
-  pantalla.
+  pero ajustado al fondo oscuro de la paleta, para que no aparezca un
+  flash de otro color antes de que carguen los estilos de cada pantalla.
+
+  Parte 10: los colores de acá abajo (background-color, color) son el
+  ÚNICO lugar del proyecto donde un color va escrito a mano en vez de
+  con var(--color-...) — es intencional: este bloque se aplica ANTES de
+  que variables.css termine de cargar, así que no puede depender de esas
+  variables. Por eso, cada vez que se cambia la paleta en variables.css,
+  hay que copiar acá el mismo valor de --color-fondo/--color-texto a
+  mano (son solo estas dos líneas).
+
+  También se agranda acá la tipografía de los títulos (h1/h2) para toda
+  la app: antes cada pantalla dependía del tamaño por defecto del
+  navegador; ahora hay un tamaño consistente y más grande, más acorde a
+  un sitio de juegos. Las pantallas que necesitan algo distinto (por
+  ejemplo el título dentro del formulario angosto de Login) lo
+  sobreescriben en su propio .css, que por especificidad de CSS siempre
+  gana sobre esta regla general.
 */
 * {
   box-sizing: border-box;
@@ -12,10 +27,21 @@
 
 body {
   margin: 0;
-  background-color: #12182b;
-  color: #eceff4;
+  background-color: #17181c;
+  color: #f5f5f7;
 }
 
 a {
   color: inherit;
+}
+
+h1 {
+  font-size: 2.4rem;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+}
+
+h2 {
+  font-size: 1.4rem;
+  font-weight: 700;
 }

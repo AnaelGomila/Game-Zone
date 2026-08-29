@@ -1,0 +1,49 @@
+.carrusel-capturas {
+  margin-top: 2rem;
+}
+
+.carrusel-capturas h2 {
+  color: var(--color-primario);
+  font-size: 1.1rem;
+  margin: 0 0 0.8rem;
+}
+
+.carrusel-capturas-visor {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.carrusel-capturas-visor img {
+  flex: 1;
+  width: 100%;
+  max-height: 380px;
+  object-fit: cover;
+  border-radius: var(--radio-borde);
+  background-color: var(--color-fondo-alt);
+}
+
+.carrusel-capturas-boton {
+  flex-shrink: 0;
+  width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 50%;
+  border: 1px solid var(--color-borde);
+  background-color: var(--color-fondo-alt);
+  color: var(--color-texto);
+  font-size: 1.3rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.carrusel-capturas-boton:hover {
+  border-color: var(--color-secundario);
+  color: var(--color-secundario);
+}
+
+.carrusel-capturas-contador {
+  margin: 0.5rem 0 0;
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--color-texto-secundario);
+}

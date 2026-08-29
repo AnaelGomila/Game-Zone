@@ -1,31 +1,48 @@
 /*
-  Paleta de colores global del proyecto Game Zone. Sin cambios respecto a
-  la Parte 1. Se incluye tal cual para que el ZIP de la Parte 6 quede
-  completo.
+  Paleta de colores global del proyecto Game Zone — Parte 10: rediseño
+  "gamer" (gris oscuro + naranja/rojo), reemplaza la identidad arcade
+  azul/amarillo/celeste de la Parte 1.
+
+  Como en TODO el proyecto los colores se consumen exclusivamente a
+  través de estas variables (nunca un color "a mano" suelto dentro de un
+  componente — regla desde la Parte 1), cambiar la paleta acá se
+  propaga solo a cada pantalla sin tener que tocar archivo por archivo.
+  Las únicas excepciones son un puñado de rgba(...) que necesitaban el
+  RGB exacto del fondo viejo para hacer transparencias (hero, overlays);
+  esos se actualizaron a mano en sus archivos junto con este cambio.
+
+  Se importa una única vez en main.jsx y desde ahí queda disponible en
+  toda la app.
 */
 
 :root {
-  /* Fondo */
-  --color-fondo: #12182b;
-  --color-fondo-alt: #1b2340;
-  --color-borde: #2a3358;
+  /* Fondo: gris oscuro neutro en vez del azul-tinta de la Parte 1. */
+  --color-fondo: #17181c;
+  --color-fondo-alt: #212228;
+  --color-borde: #3d3e46;
 
-  /* Marca */
-  --color-primario: #f2b705;
-  --color-primario-hover: #d9a300;
-  --color-secundario: #4ecdc4;
-  --color-secundario-hover: #3bb0a8;
+  /* Marca: naranja fuerte como color primario (CTAs, títulos, precios),
+     rojo/crimson como secundario (links, foco, hover, acentos) — el
+     combo clásico "gamer" sobre gris oscuro. */
+  --color-primario: #ff5722;
+  --color-primario-hover: #e0481a;
+  --color-secundario: #e63950;
+  --color-secundario-hover: #c92e42;
 
   /* Texto */
-  --color-texto: #eceff4;
-  --color-texto-secundario: #9aa3b8;
+  --color-texto: #f5f5f7;
+  --color-texto-secundario: #9a9aa5;
 
-  /* Estados (alertas, badges) */
+  /* Estados (alertas, badges) — se mantienen semánticamente separados
+     de los colores de marca (verde éxito, rojo error, amarillo
+     advertencia), para que una alerta de error no se confunda con el
+     rojo secundario de marca. */
   --color-exito: #4ade80;
   --color-error: #f87171;
   --color-advertencia: #fbbf24;
 
-  /* Tipografía y espaciado base */
-  --radio-borde: 8px;
+  /* Tipografía y espaciado base. Radio de borde un poco más marcado
+     (8px → 10px) para un look más "chunky". */
+  --radio-borde: 10px;
   --fuente-base: 'Segoe UI', system-ui, sans-serif;
 }

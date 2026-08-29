@@ -3,16 +3,24 @@
   font-family: var(--fuente-base);
 }
 
-/* Parte 7: hero con la imagen del juego de fondo, ocupa ~un tercio de la
-   pantalla y se oscurece con un degradado hacia --color-fondo a medida
-   que baja, para fundirse con el resto de la página. */
+/* Parte 7: hero con la imagen del juego de fondo, se oscurece con un
+   degradado hacia --color-fondo a medida que baja, para fundirse con el
+   resto de la página.
+   Parte 9: se agranda un poco (33vh → 45vh) para que se note más la
+   imagen de fondo, sin tocar nada del layout global (sidebar/navbar). */
 .detalle-juego-hero {
-  min-height: 33vh;
+  min-height: 45vh;
   display: flex;
   align-items: flex-end;
   background-color: var(--color-fondo-alt);
   background-size: cover;
-  background-position: center;
+  /* "center top" en vez de "center": ancla la parte de arriba de la
+     imagen contra la parte de arriba del hero, así el recorte (que
+     siempre existe con background-size: cover si la proporción de la
+     imagen no coincide con la del hero) se saca solo de abajo, en vez
+     de parejo arriba y abajo — antes se perdía contenido de la parte
+     superior de la imagen, que suele ser la más relevante. */
+  background-position: center top;
   position: relative;
 }
 
@@ -20,10 +28,13 @@
   content: '';
   position: absolute;
   inset: 0;
+  /* rgb(23, 24, 28, ...) es --color-fondo en formato rgb, hardcodeado
+     acá (no con var()) porque el degradado necesita el canal alfa —
+     ver la misma nota en TarjetaJuego.css. */
   background: linear-gradient(
     to bottom,
-    rgba(18, 24, 43, 0.55) 0%,
-    rgba(18, 24, 43, 0.75) 55%,
+    rgba(23, 24, 28, 0.55) 0%,
+    rgba(23, 24, 28, 0.78) 55%,
     var(--color-fondo) 100%
   );
 }
@@ -68,7 +79,7 @@
   padding: 0.5rem 0.9rem;
   border-radius: var(--radio-borde);
   border: 1px solid var(--color-secundario);
-  background-color: rgba(18, 24, 43, 0.5);
+  background-color: rgba(23, 24, 28, 0.5);
   color: var(--color-secundario);
   font-family: var(--fuente-base);
   font-size: 0.85rem;
@@ -93,21 +104,87 @@
   cursor: not-allowed;
 }
 
+/* Parte 9: antes era una sola fila (flex + flex-wrap) con los 4 datos
+   pegados uno al lado del otro — con juegos que tienen muchas
+   plataformas, todo quedaba apretado y difícil de leer. Ahora es una
+   grilla de "ítems" (etiqueta arriba, valor abajo) que se acomodan solos
+   según el ancho disponible. */
 .detalle-juego-meta {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 0.9rem 1.5rem;
+  margin-top: 1.2rem;
+}
+
+.detalle-juego-meta-item {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem 1rem;
-  margin-top: 0.8rem;
-  font-size: 0.85rem;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+/* Plataformas suele ser el dato más largo (a veces 6-7 nombres seguidos),
+   así que se le da su propia fila completa en vez de competir por
+   espacio con el resto — esto es justo lo que resuelve el problema de
+   "todo apretado en una sola línea". */
+.detalle-juego-meta-item-ancho {
+  grid-column: 1 / -1;
+}
+
+.detalle-juego-meta-etiqueta {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--color-texto-secundario);
+}
+
+.detalle-juego-meta-valor {
+  font-size: 0.95rem;
   color: var(--color-texto);
 }
 
-/* El resto de la ficha (descripción) vuelve al fondo sólido normal,
-   como cualquier otra pantalla. */
+/* El resto de la ficha (descripción, capturas, ratings, requisitos)
+   vuelve al fondo sólido normal, como cualquier otra pantalla. */
 .detalle-juego-cuerpo {
   max-width: 800px;
   margin: 0 auto;
   padding: 1.5rem;
+}
+
+/* Parte 9: la descripción se recorta a una altura fija cuando es larga,
+   con un degradado que se funde hacia el fondo en vez de cortar el
+   texto en seco — el botón "Ver más"/"Ver menos" (fuera de este bloque,
+   en el JSX) alterna la clase "recortada". */
+.detalle-juego-descripcion {
+  overflow: hidden;
+}
+
+.detalle-juego-descripcion.recortada {
+  max-height: 5.5rem;
+  position: relative;
+}
+
+.detalle-juego-descripcion.recortada::after {
+  content: '';
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 2.5rem;
+  background: linear-gradient(to bottom, transparent, var(--color-fondo));
+}
+
+.detalle-juego-ver-mas {
+  display: block;
+  margin: 0.4rem 0 0;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--color-secundario);
+  font-family: var(--fuente-base);
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.detalle-juego-ver-mas:hover {
+  text-decoration: underline;
 }
 
 .detalle-juego-error {
@@ -122,4 +199,92 @@
   color: var(--color-texto-secundario);
   font-style: italic;
   margin-top: 0.4rem;
+}
+
+/* Parte 9: desglose de opinión de la comunidad (juego.ratings). Cada fila
+   es etiqueta + barra de porcentaje + número. El ancho de la barra usa
+   un valor que cambia por juego (el %), así que ese ancho puntual va
+   como estilo inline en el JSX — el resto (colores, alto, bordes
+   redondeados) es CSS estático, como el resto del proyecto. */
+.detalle-juego-ratings {
+  margin-top: 2rem;
+  padding: 1.2rem;
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-borde);
+  background-color: var(--color-fondo-alt);
+}
+
+.detalle-juego-ratings h2 {
+  color: var(--color-primario);
+  font-size: 1.1rem;
+  margin: 0 0 0.8rem;
+}
+
+.detalle-juego-ratings-fila {
+  display: grid;
+  grid-template-columns: 110px 1fr 3rem;
+  align-items: center;
+  gap: 0.7rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.85rem;
+}
+
+.detalle-juego-ratings-etiqueta {
+  color: var(--color-texto-secundario);
+}
+
+.detalle-juego-ratings-barra {
+  height: 0.5rem;
+  border-radius: 999px;
+  background-color: var(--color-fondo-alt);
+  overflow: hidden;
+}
+
+.detalle-juego-ratings-barra-relleno {
+  height: 100%;
+  background-color: var(--color-secundario);
+  border-radius: 999px;
+}
+
+.detalle-juego-ratings-porcentaje {
+  text-align: right;
+  color: var(--color-texto-secundario);
+}
+
+/* Parte 9: requisitos de PC. El texto que devuelve RAWG viene con saltos
+   de línea propios (separando SO, procesador, memoria, etc.), por eso
+   white-space: pre-line — respeta esos saltos sin tener que parsear el
+   texto campo por campo, que sería mucho más código para un dato que
+   ni siquiera todos los juegos tienen cargado. */
+.detalle-juego-requisitos {
+  margin-top: 2rem;
+  padding: 1.2rem;
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-borde);
+  background-color: var(--color-fondo-alt);
+}
+
+.detalle-juego-requisitos h2 {
+  color: var(--color-primario);
+  font-size: 1.1rem;
+  margin: 0 0 0.8rem;
+}
+
+.detalle-juego-requisitos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.2rem;
+}
+
+.detalle-juego-requisitos-grid h3 {
+  font-size: 0.9rem;
+  color: var(--color-texto);
+  margin: 0 0 0.4rem;
+}
+
+.detalle-juego-requisitos-grid p {
+  font-size: 0.8rem;
+  color: var(--color-texto-secundario);
+  white-space: pre-line;
+  margin: 0;
 }

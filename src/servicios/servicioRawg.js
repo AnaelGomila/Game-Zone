@@ -68,6 +68,18 @@ export async function obtenerJuegoPorId(id) {
   return manejarRespuesta(respuesta);
 }
 
+// Nuevo: capturas de pantalla de un juego puntual, para el carrusel del
+// Detalle. Es un endpoint aparte del detalle normal (GET /games/{id}),
+// documentado desde la Parte 7 pero nunca usado hasta ahora. Devuelve
+// solo el array de capturas (cada una con "image", entre otros campos),
+// que es lo único que necesita <CarruselCapturas>.
+export async function obtenerCapturas(id) {
+  const url = `${URL_BASE_RAWG}/games/${id}/screenshots?key=${CLAVE_RAWG}`;
+  const respuesta = await fetch(url);
+  const datos = await manejarRespuesta(respuesta);
+  return datos.results;
+}
+
 // Nuevo en la Parte 7: lista de géneros reales de RAWG (Acción, RPG,
 // Shooter, Estrategia, etc.), usada para armar las opciones del
 // desplegable "Categoría" del Catálogo — en vez de inventar una lista
