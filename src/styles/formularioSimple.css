@@ -39,6 +39,7 @@
 }
 
 .formulario-simple input,
+.formulario-simple select,
 .formulario-simple textarea {
   padding: 0.5rem 0.6rem;
   border-radius: var(--radio-borde);
@@ -50,6 +51,7 @@
 }
 
 .formulario-simple input:focus,
+.formulario-simple select:focus,
 .formulario-simple textarea:focus {
   outline: 2px solid var(--color-secundario);
 }

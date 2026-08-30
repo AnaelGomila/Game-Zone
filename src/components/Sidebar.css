@@ -2,8 +2,8 @@
   width: 200px;
   flex-shrink: 0;
   position: sticky;
-  top: 57px; /* alto aproximado de la barra superior, para que quede pegada justo debajo */
-  height: calc(100vh - 57px);
+  top: var(--alto-barra-superior);
+  height: calc(100vh - var(--alto-barra-superior));
   overflow-y: auto;
   background-color: var(--color-fondo-alt);
   border-right: 1px solid var(--color-borde);

@@ -10,11 +10,13 @@ import ModalEditarSugerencia from '../components/ModalEditarSugerencia';
 import '../styles/listaSugerencias.css';
 import '../styles/cargando.css';
 
-const FILTROS = ['todas', 'pendiente', 'aprobado', 'rechazado'];
+const FILTROS_ESTADO = ['todas', 'pendiente', 'aprobado', 'rechazado'];
+const FILTROS_ORIGEN = ['todos', 'usuarios', 'admins'];
 
 /*
-  AdminSugerencias — deja de ser placeholder en la Parte 6.
-  ----------------------------------------------------------------
+  AdminSugerencias — deja de ser placeholder en la Parte 6, extendido en
+  la Parte 11.
+  ----------------------------------------------------------------------
   Panel de administración para la entidad ABM principal del proyecto:
   aprobar, rechazar, editar o eliminar sugerencias de juegos. Página
   separada de AdminUsuarios (no tabs), como quedó decidido desde la
@@ -22,7 +24,16 @@ const FILTROS = ['todas', 'pendiente', 'aprobado', 'rechazado'];
 
   `sugerencias` viene con un join a `usuarios(nombre)` (ver
   servicioSugerencias.obtenerTodasLasSugerencias) para poder mostrar quién
-  la propuso, sin necesitar un segundo pedido por cada fila.
+  la propuso, sin necesitar un segundo pedido por cada fila. Esto sirve
+  igual para mostrar el nombre de un admin que agregó un juego (Parte
+  11): no hace falta ninguna columna nueva para "quién lo agregó", el
+  usuario_id de siempre ya apunta al admin cuando el que creó la fila fue
+  un admin.
+
+  Parte 11: se agrega un segundo filtro (Origen: Todos/Usuarios/Admins),
+  independiente del filtro por estado — un admin puede querer ver, por
+  ejemplo, "todo lo aprobado, sea de usuarios o de admins" o "solo lo que
+  agregaron los admins". Se filtra por la columna creado_por_admin.
 */
 function AdminSugerencias() {
   const { mostrarAlerta } = useAlerta();
@@ -30,7 +41,8 @@ function AdminSugerencias() {
   const [sugerencias, setSugerencias] = useState([]);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState('');
-  const [filtro, setFiltro] = useState('pendiente');
+  const [filtroEstado, setFiltroEstado] = useState('pendiente');
+  const [filtroOrigen, setFiltroOrigen] = useState('todos');
   const [sugerenciaEditando, setSugerenciaEditando] = useState(null);
 
   useEffect(() => {
@@ -44,9 +56,15 @@ function AdminSugerencias() {
   }, []);
 
   const sugerenciasFiltradas = useMemo(() => {
-    if (filtro === 'todas') return sugerencias;
-    return sugerencias.filter((sugerencia) => sugerencia.estado === filtro);
-  }, [sugerencias, filtro]);
+    return sugerencias.filter((sugerencia) => {
+      const pasaEstado = filtroEstado === 'todas' || sugerencia.estado === filtroEstado;
+      const pasaOrigen =
+        filtroOrigen === 'todos' ||
+        (filtroOrigen === 'admins' && sugerencia.creado_por_admin) ||
+        (filtroOrigen === 'usuarios' && !sugerencia.creado_por_admin);
+      return pasaEstado && pasaOrigen;
+    });
+  }, [sugerencias, filtroEstado, filtroOrigen]);
 
   function actualizarEnEstado(id, cambios) {
     setSugerencias((actuales) =>
@@ -66,7 +84,17 @@ function AdminSugerencias() {
       );
     } catch (error) {
       console.error('Error al cambiar estado:', error.message);
-      mostrarAlerta('No se pudo actualizar el estado.', 'error');
+      // Parte 11: si falta la imagen, el trigger de la base
+      // (exigir_imagen_si_aprobado) rechaza el UPDATE con un mensaje
+      // propio en español — se muestra tal cual en vez del genérico,
+      // porque le dice al admin exactamente qué hacer ("cargá una
+      // imagen primero") en lugar de un error sin acción posible.
+      mostrarAlerta(
+        error.message.includes('imagen cargada')
+          ? 'Esta sugerencia todavía no tiene una imagen cargada — completala con "Editar" antes de aprobar.'
+          : 'No se pudo actualizar el estado.',
+        'error'
+      );
     }
   }
 
@@ -86,14 +114,27 @@ function AdminSugerencias() {
       <h1>Admin: Sugerencias</h1>
 
       <div className="filtros-estado">
-        {FILTROS.map((opcion) => (
+        {FILTROS_ESTADO.map((opcion) => (
           <button
             key={opcion}
             type="button"
-            className={filtro === opcion ? 'activo' : ''}
-            onClick={() => setFiltro(opcion)}
+            className={filtroEstado === opcion ? 'activo' : ''}
+            onClick={() => setFiltroEstado(opcion)}
           >
             {opcion === 'todas' ? 'Todas' : opcion[0].toUpperCase() + opcion.slice(1)}
+          </button>
+        ))}
+      </div>
+
+      <div className="filtros-estado">
+        {FILTROS_ORIGEN.map((opcion) => (
+          <button
+            key={opcion}
+            type="button"
+            className={filtroOrigen === opcion ? 'activo' : ''}
+            onClick={() => setFiltroOrigen(opcion)}
+          >
+            Origen: {opcion[0].toUpperCase() + opcion.slice(1)}
           </button>
         ))}
       </div>
@@ -109,19 +150,34 @@ function AdminSugerencias() {
         !error &&
         sugerenciasFiltradas.map((sugerencia) => (
           <div key={sugerencia.id} className="tarjeta-sugerencia">
-            <div className="tarjeta-sugerencia-encabezado">
-              <h2>{sugerencia.nombre_juego}</h2>
-              <BadgeEstado estado={sugerencia.estado} />
+            <div className="tarjeta-sugerencia-cuerpo">
+              {sugerencia.imagen_url && (
+                <img
+                  src={sugerencia.imagen_url}
+                  alt={sugerencia.nombre_juego}
+                  className="tarjeta-sugerencia-miniatura"
+                />
+              )}
+
+              <div className="tarjeta-sugerencia-texto">
+                <div className="tarjeta-sugerencia-encabezado">
+                  <h2>{sugerencia.nombre_juego}</h2>
+                  <BadgeEstado estado={sugerencia.estado} />
+                </div>
+
+                <p className="tarjeta-sugerencia-meta">
+                  {sugerencia.creado_por_admin ? 'Agregado por admin: ' : 'Propuesta por: '}
+                  {sugerencia.usuarios?.nombre || 'Usuario desconocido'}
+                  {sugerencia.plataforma && ` · Plataforma: ${sugerencia.plataforma}`}
+                  {sugerencia.genero && ` · Género: ${sugerencia.genero}`}
+                  {sugerencia.anio_lanzamiento && ` · Año: ${sugerencia.anio_lanzamiento}`}
+                </p>
+
+                {sugerencia.descripcion && (
+                  <p className="tarjeta-sugerencia-descripcion">{sugerencia.descripcion}</p>
+                )}
+              </div>
             </div>
-
-            <p className="tarjeta-sugerencia-meta">
-              Propuesta por: {sugerencia.usuarios?.nombre || 'Usuario desconocido'}
-              {sugerencia.plataforma && ` · Plataforma: ${sugerencia.plataforma}`}
-            </p>
-
-            {sugerencia.descripcion && (
-              <p className="tarjeta-sugerencia-descripcion">{sugerencia.descripcion}</p>
-            )}
 
             <div className="tarjeta-sugerencia-acciones">
               {sugerencia.estado !== 'aprobado' && (

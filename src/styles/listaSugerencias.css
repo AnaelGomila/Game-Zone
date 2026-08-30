@@ -37,6 +37,27 @@
   margin-top: 1rem;
 }
 
+/* Parte 11: fila con miniatura (si hay imagen_url) + el resto del texto
+   al lado. Sin imagen (sugerencias de usuario todavía no completadas),
+   simplemente no se renderiza el <img> y el texto ocupa todo el ancho. */
+.tarjeta-sugerencia-cuerpo {
+  display: flex;
+  gap: 0.9rem;
+}
+
+.tarjeta-sugerencia-miniatura {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: var(--radio-borde);
+  flex-shrink: 0;
+}
+
+.tarjeta-sugerencia-texto {
+  flex: 1;
+  min-width: 0;
+}
+
 .tarjeta-sugerencia-encabezado {
   display: flex;
   align-items: center;

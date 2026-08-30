@@ -1,0 +1,74 @@
+.carrusel-juegos-agregados-vacio {
+  color: var(--color-texto-secundario);
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+}
+
+.carrusel-juegos-agregados-visor {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.carrusel-juegos-agregados-tarjeta {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  min-width: 0;
+}
+
+.carrusel-juegos-agregados-tarjeta img {
+  width: 56px;
+  height: 56px;
+  object-fit: cover;
+  border-radius: var(--radio-borde);
+  flex-shrink: 0;
+}
+
+.carrusel-juegos-agregados-texto {
+  min-width: 0;
+}
+
+.carrusel-juegos-agregados-texto h3 {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--color-texto);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.carrusel-juegos-agregados-texto p {
+  margin: 0.2rem 0 0;
+  font-size: 0.75rem;
+  color: var(--color-texto-secundario);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.carrusel-juegos-agregados-boton {
+  flex-shrink: 0;
+  width: 1.8rem;
+  height: 1.8rem;
+  border-radius: 50%;
+  border: 1px solid var(--color-borde);
+  background-color: var(--color-fondo);
+  color: var(--color-texto);
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.carrusel-juegos-agregados-boton:hover {
+  border-color: var(--color-secundario);
+  color: var(--color-secundario);
+}
+
+.carrusel-juegos-agregados-contador {
+  margin: 0.4rem 0 0;
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--color-texto-secundario);
+}

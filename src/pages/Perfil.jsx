@@ -1,6 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAuth } from '../contexto/ContextoAuth';
+import { obtenerJuegosAgregadosPorAdmin } from '../servicios/servicioSugerencias';
 import ModalCambiarContrasena from '../components/ModalCambiarContrasena';
+import CarruselJuegosAgregados from '../components/CarruselJuegosAgregados';
 import '../styles/perfil.css';
 
 /*
@@ -17,10 +19,31 @@ import '../styles/perfil.css';
   se expone nunca a que el propio usuario lo edite — eso es exclusivo de
   AdminUsuarios, reforzado además por el trigger de base de datos de la
   Parte 6 (evitar_cambio_rol_no_admin).
+
+  Parte 11: si el usuario logueado es admin, se agrega debajo una
+  sección con el carrusel de juegos que agregó (CarruselJuegosAgregados),
+  para que el Perfil de un admin no se vea tan vacío como el de un
+  usuario común — a propósito compacta (un carrusel, no una grilla
+  completa) porque en algún momento se piensa sumar más contenido a esta
+  pantalla y no queremos que ocupe toda la altura.
 */
 function Perfil() {
   const { usuario, perfil, esAdmin } = useAuth();
   const [modalAbierto, setModalAbierto] = useState(false);
+
+  const [juegosAgregados, setJuegosAgregados] = useState([]);
+  const [cargandoJuegos, setCargandoJuegos] = useState(esAdmin);
+
+  useEffect(() => {
+    if (!esAdmin || !usuario) return;
+
+    obtenerJuegosAgregadosPorAdmin(usuario.id)
+      .then((resultado) => setJuegosAgregados(resultado))
+      .catch((error) =>
+        console.error('Error al traer juegos agregados:', error.message)
+      )
+      .finally(() => setCargandoJuegos(false));
+  }, [esAdmin, usuario]);
 
   return (
     <div className="perfil">
@@ -48,6 +71,17 @@ function Perfil() {
           Cambiar contraseña
         </button>
       </div>
+
+      {esAdmin && (
+        <div className="perfil-tarjeta perfil-seccion-juegos">
+          <span className="perfil-etiqueta">Juegos que agregué</span>
+          {cargandoJuegos ? (
+            <p className="perfil-juegos-cargando">Cargando...</p>
+          ) : (
+            <CarruselJuegosAgregados juegos={juegosAgregados} />
+          )}
+        </div>
+      )}
 
       {modalAbierto && (
         <ModalCambiarContrasena onCerrar={() => setModalAbierto(false)} />

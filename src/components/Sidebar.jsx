@@ -10,11 +10,16 @@ import './Sidebar.css';
   para poder marcar visualmente cuál es la pantalla activa (NavLink le
   agrega la clase "active" sola al link que coincide con la URL actual).
 
-  Perfil y los links de admin YA NO están acá — se movieron a
-  <AvatarMenu>, adentro de <BarraSuperior>.
+  Perfil y los links de admin de usuarios/sugerencias YA NO están acá —
+  viven en <AvatarMenu>, adentro de <BarraSuperior>.
+
+  Parte 11: si el usuario logueado es admin, "Sugerir juego" y "Mis
+  sugerencias" se reemplazan por "Agregar juego" — el admin no propone
+  juegos para que otro los revise, los agrega directamente (ver
+  AgregarJuego.jsx). Favoritos se mantiene igual para todos, admin o no.
 */
 function Sidebar() {
-  const { estaLogueado } = useAuth();
+  const { estaLogueado, esAdmin } = useAuth();
 
   return (
     <aside className="sidebar">
@@ -31,15 +36,27 @@ function Sidebar() {
             <NavLink to="/favoritos" className={({ isActive }) => (isActive ? 'activo' : '')}>
               Favoritos
             </NavLink>
-            <NavLink to="/sugerir" className={({ isActive }) => (isActive ? 'activo' : '')}>
-              Sugerir juego
-            </NavLink>
-            <NavLink
-              to="/mis-sugerencias"
-              className={({ isActive }) => (isActive ? 'activo' : '')}
-            >
-              Mis sugerencias
-            </NavLink>
+
+            {esAdmin ? (
+              <NavLink
+                to="/admin/agregar-juego"
+                className={({ isActive }) => (isActive ? 'activo' : '')}
+              >
+                Agregar juego
+              </NavLink>
+            ) : (
+              <>
+                <NavLink to="/sugerir" className={({ isActive }) => (isActive ? 'activo' : '')}>
+                  Sugerir juego
+                </NavLink>
+                <NavLink
+                  to="/mis-sugerencias"
+                  className={({ isActive }) => (isActive ? 'activo' : '')}
+                >
+                  Mis sugerencias
+                </NavLink>
+              </>
+            )}
           </>
         )}
       </nav>

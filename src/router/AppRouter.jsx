@@ -11,6 +11,7 @@ import SugerirJuego from '../pages/SugerirJuego';
 import MisSugerencias from '../pages/MisSugerencias';
 import AdminUsuarios from '../pages/AdminUsuarios';
 import AdminSugerencias from '../pages/AdminSugerencias';
+import AgregarJuego from '../pages/AgregarJuego';
 import NoEncontrada from '../pages/NoEncontrada';
 
 import RutaPrivada from './RutaPrivada';
@@ -23,6 +24,11 @@ import RutaAdmin from './RutaAdmin';
   /admin/sugerencias ahora usan <RutaAdmin> en vez de <RutaPrivada>, para
   que de verdad estén restringidas a usuarios con rol 'admin' (ver
   RutaAdmin.jsx para el detalle del bug que esto corrige).
+
+  Parte 11: se agrega /admin/agregar-juego (también con RutaAdmin) — el
+  formulario propio del admin para agregar juegos directamente, sin
+  pasar por el flujo de sugerencia+revisión que usan los usuarios
+  comunes en /sugerir.
 */
 function AppRouter() {
   return (
@@ -89,6 +95,14 @@ function AppRouter() {
         element={
           <RutaAdmin>
             <AdminSugerencias />
+          </RutaAdmin>
+        }
+      />
+      <Route
+        path="/admin/agregar-juego"
+        element={
+          <RutaAdmin>
+            <AgregarJuego />
           </RutaAdmin>
         }
       />

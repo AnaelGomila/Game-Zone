@@ -45,4 +45,14 @@
      (8px → 10px) para un look más "chunky". */
   --radio-borde: 10px;
   --fuente-base: 'Segoe UI', system-ui, sans-serif;
+
+  /* Alto aproximado de BarraSuperior, usado por Sidebar.css para saber
+     dónde "pegarse" al hacer scroll (position: sticky). No hay forma de
+     leer el alto real de otro elemento solo con CSS, así que queda acá
+     como número aproximado — si BarraSuperior cambia de padding o de
+     tamaño de fuente en el futuro, hay que actualizar este valor a mano.
+     (Quedó desactualizado una vez, en la Parte 10, cuando se agrandó la
+     barra sin tocar este número — por eso ahora vive en una sola
+     variable en vez de repetido en Sidebar.css.) */
+  --alto-barra-superior: 73px;
 }
