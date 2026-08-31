@@ -194,11 +194,28 @@
   margin-top: 2rem;
 }
 
-.detalle-juego-traduciendo {
-  font-size: 0.8rem;
+/* Parte 15: botón de traducción bajo demanda — mismo estilo "link" que
+   .detalle-juego-ver-mas, ya que cumple un rol parecido (una acción
+   secundaria y chica, no un CTA grande). */
+.detalle-juego-traducir {
+  display: block;
+  margin: 0.5rem 0 0;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--color-secundario);
+  font-family: var(--fuente-base);
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.detalle-juego-traducir:hover:not(:disabled) {
+  text-decoration: underline;
+}
+
+.detalle-juego-traducir:disabled {
   color: var(--color-texto-secundario);
-  font-style: italic;
-  margin-top: 0.4rem;
+  cursor: wait;
 }
 
 /* Parte 9: desglose de opinión de la comunidad (juego.ratings). Cada fila

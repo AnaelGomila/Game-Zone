@@ -76,6 +76,22 @@
   cursor: not-allowed;
 }
 
+.formulario-simple-checkbox {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.8rem;
+  color: var(--color-texto);
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.formulario-simple-checkbox input {
+  width: auto;
+  accent-color: var(--color-primario);
+}
+
 .formulario-simple-error {
   color: var(--color-error);
   font-size: 0.85rem;

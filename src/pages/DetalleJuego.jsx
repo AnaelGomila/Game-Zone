@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { obtenerJuegoPorId, obtenerCapturas } from '../servicios/servicioRawg';
+import { obtenerJuegoLocalPublicoPorId } from '../servicios/servicioSugerencias';
+import { esIdLocal, extraerIdReal } from '../servicios/adaptadorJuegoLocal';
 import { traducirAlEspanol } from '../servicios/servicioTraduccion';
 import { useAuth } from '../contexto/ContextoAuth';
 import { useAlerta } from '../contexto/ContextoAlerta';
@@ -10,6 +12,7 @@ import {
   quitarFavorito,
 } from '../servicios/servicioFavoritos';
 import CarruselCapturas from '../components/CarruselCapturas';
+import ComentariosJuego from '../components/ComentariosJuego';
 import '../styles/detalleJuego.css';
 import '../styles/cargando.css';
 
@@ -35,46 +38,80 @@ function traducirTituloRating(titulo) {
 }
 
 /*
-  DetalleJuego — Parte 9: mejoras varias sobre la versión de la Parte 7.
+  DetalleJuego — Parte 9 (mejoras) + Parte 12 (soporta juegos locales).
+  ------------------------------------------------------------------------
+  El id que llega por la URL puede ser de dos tipos:
+  - Un número: es un id de RAWG, se pide con obtenerJuegoPorId (como
+    siempre desde la Parte 4).
+  - "local-<uuid>": es una fila de la tabla `sugerencias` (un juego
+    agregado por un admin, o una sugerencia de usuario ya aprobada — ver
+    la sección "Agregados por la comunidad" en Catalogo.jsx), se pide con
+    obtenerJuegoLocalPublicoPorId. esIdLocal()/extraerIdReal() son las
+    mismas funciones de adaptadorJuegoLocal.js que arma esa sección para
+    construir la URL de cada tarjeta.
 
-  1. La fila de meta (Lanzamiento/Rating/Géneros/Plataformas) pasa de una
-     sola línea con flex-wrap a una grilla de "ítems" con etiqueta +
-     valor. Antes, con juegos que tienen muchas plataformas, todo quedaba
-     apretado en una sola fila difícil de leer. Ahora "Plataformas" ocupa
-     su propia fila completa (grid-column: 1 / -1 en el CSS) en vez de
-     competir por espacio con el resto. De paso se suma "Tiempo promedio"
-     (juego.playtime), que ya venía en la respuesta de RAWG y no se
-     mostraba.
+  Diferencias cuando el juego es local (esLocal):
+  - No hay traducción: el texto ya está en español (lo escribió un
+    usuario o un admin), así que se salta directo ese paso sin llamar a
+    MyMemory.
+  - No hay botón de favoritos: la tabla `favoritos` guarda juego_id como
+    el número de RAWG; mezclar ahí un id de otro esquema (uuid de
+    `sugerencias`) complicaría esa tabla para un caso de uso chico. Se
+    documenta como limitación conocida en vez de reformar favoritos.
+  - No hay carrusel de capturas, ni desglose de opinión de la comunidad,
+    ni tiempo de juego — son datos que solo existen en RAWG. Como esas
+    secciones ya estaban armadas para no mostrarse si falta el dato, no
+    hizo falta cambiar nada ahí: alcanza con no pedir capturas y con que
+    juego.ratings/juego.playtime queden undefined para un juego local.
+  - Los requisitos de PC salen directo de la fila (requisitos_minimos/
+    requisitos_recomendados), en vez de buscarlos adentro de "platforms"
+    como se hace con RAWG (los juegos locales no tienen esa estructura).
+  - Se agrega un dato nuevo a la meta, "Agregado por" (nombre_autor,
+    completado solo por un trigger de la base al crear la fila — ver
+    sql/parte-12-catalogo-comunidad.sql), porque RAWG no tiene ese
+    concepto y solo tiene sentido para estos juegos. Desde la Parte 13
+    se respeta además la preferencia de anonimato del usuario
+    (mostrar_autor): si pidió no mostrar su nombre al sugerir el juego,
+    esta sección directamente no aparece en la vista pública — aunque
+    nombre_autor siga guardado en la base para que el admin pueda verlo
+    en AdminSugerencias con fines de moderación.
 
-  2. La descripción se recorta a una altura máxima con un botón
-     "Ver más"/"Ver menos" cuando supera los LARGO_MAXIMO_DESCRIPCION
-     caracteres. descripcionExpandida se reinicia a false cada vez que
-     cambia el id (juego nuevo), para no arrancar ya expandido si se
-     navega de un juego a otro.
+  La ruta /juego/:id sigue protegida con RutaPrivada (ver AppRouter.jsx),
+  igual para juegos locales que para los de RAWG — no se hizo pública
+  aunque el Catálogo sí lo sea, para mantener el mismo comportamiento que
+  ya tenían los juegos de RAWG desde la Parte 3 (Catálogo público, Detalle
+  privado).
 
-  3. Se agrega el carrusel de capturas de pantalla (<CarruselCapturas>),
-     pedido con un endpoint aparte (obtenerCapturas) en su propio
-     useEffect — no viene en el mismo pedido que el detalle del juego.
+  Parte 14: se agrega <ComentariosJuego> al final, debajo de todo lo
+  demás. Funciona igual para juegos de RAWG y locales sin ninguna
+  distinción — recibe juegoId={id} tal cual viene de la URL (numérico o
+  con prefijo "local-"), porque comentarios_juego.juego_id es una columna
+  de texto, no una referencia a ninguna tabla puntual.
 
-  4. Se agrega el desglose de opinión de la comunidad (juego.ratings:
-     Exceptional/Recommended/Meh/Skip con porcentaje), como barras.
-
-  5. Se agregan los requisitos de PC (mínimos y recomendados), leyendo
-     platforms[].requirements de la entrada cuyo platform.slug es 'pc'.
-     RAWG no siempre carga este dato para todas las plataformas —
-     generalmente solo para PC, así que si no hay entrada de PC o no
-     tiene requirements, la sección directamente no se muestra.
+  Parte 15: la traducción de la descripción deja de ser automática. Antes
+  se pedía a MyMemory apenas cargaba el juego, gastando cuota diaria
+  (5000 caracteres/día por IP) aunque nadie llegara a leer la
+  descripción. Ahora se muestra siempre el texto original primero, y
+  aparece un botón "Traducir al español" — recién ahí se pide la
+  traducción, y una vez que llega, el mismo botón permite alternar entre
+  ver el original o la traducción sin volver a pedir nada (el texto
+  traducido queda guardado en descripcionTraducida). Este botón no
+  aparece para juegos locales, que ya están en español.
 */
 function DetalleJuego() {
   const { id } = useParams();
   const { usuario } = useAuth();
   const { mostrarAlerta } = useAlerta();
 
+  const esLocal = esIdLocal(id);
+
   const [juego, setJuego] = useState(null);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState('');
 
-  const [descripcion, setDescripcion] = useState('');
+  const [descripcionOriginal, setDescripcionOriginal] = useState('');
+  const [descripcionTraducida, setDescripcionTraducida] = useState(null);
+  const [mostrarTraduccion, setMostrarTraduccion] = useState(false);
   const [traduciendo, setTraduciendo] = useState(false);
   const [descripcionExpandida, setDescripcionExpandida] = useState(false);
 
@@ -88,29 +125,39 @@ function DetalleJuego() {
     setError('');
     setDescripcionExpandida(false);
 
-    obtenerJuegoPorId(id)
+    const pedido = esLocal
+      ? obtenerJuegoLocalPublicoPorId(extraerIdReal(id))
+      : obtenerJuegoPorId(id);
+
+    pedido
       .then((resultado) => setJuego(resultado))
       .catch((error) => {
-        console.error('Error al traer el juego de RAWG:', error.message);
+        console.error('Error al traer el juego:', error.message);
         setError('No se pudo cargar este juego. Probá de nuevo más tarde.');
       })
       .finally(() => setCargando(false));
-  }, [id]);
+  }, [id, esLocal]);
 
-  // Pedido aparte del detalle principal: GET /games/{id}/screenshots.
-  // Si falla, se deja el carrusel vacío (no se muestra) en vez de romper
-  // el resto de la pantalla — el resto del Detalle no depende de esto.
+  // Capturas de pantalla: solo existen para juegos de RAWG (endpoint
+  // GET /games/{id}/screenshots). Para uno local, ni se pide.
   useEffect(() => {
+    if (esLocal) {
+      setCapturas([]);
+      return;
+    }
+
     obtenerCapturas(id)
       .then((resultado) => setCapturas(resultado))
       .catch((error) => {
         console.error('Error al traer las capturas de RAWG:', error.message);
         setCapturas([]);
       });
-  }, [id]);
+  }, [id, esLocal]);
 
+  // Favoritos: no soportado para juegos locales (ver comentario de
+  // cabecera) — directamente no se chequea nada.
   useEffect(() => {
-    if (!usuario) {
+    if (esLocal || !usuario) {
       setFavoritoId(null);
       return;
     }
@@ -118,29 +165,42 @@ function DetalleJuego() {
     esFavorito(usuario.id, Number(id))
       .then((idExistente) => setFavoritoId(idExistente))
       .catch((error) => console.error('Error al chequear favorito:', error.message));
-  }, [id, usuario]);
+  }, [id, usuario, esLocal]);
 
-  // RAWG devuelve la descripción en inglés (así está cargada en su base).
-  // Se muestra primero el texto original para no dejar la pantalla en
-  // blanco, y en paralelo se pide la traducción a MyMemory; cuando llega,
-  // reemplaza el texto. Si la traducción falla (sin conexión, cuota diaria
-  // agotada, etc.) se deja el texto en inglés en vez de romper la pantalla.
+  // Parte 15: la traducción dejó de ser automática. Acá solo se guarda el
+  // texto original (en inglés para RAWG, ya en español para un juego
+  // local) — traducir es una acción aparte que dispara el usuario con un
+  // botón (manejarTraducir), para no gastar la cuota diaria de MyMemory
+  // (5000 caracteres/día por IP, Parte 4) en juegos que nadie llega a leer
+  // en detalle.
   useEffect(() => {
-    if (!juego?.description_raw) {
-      setDescripcion('');
+    const textoOriginal = esLocal ? juego?.descripcion : juego?.description_raw;
+    setDescripcionOriginal(textoOriginal || '');
+    setDescripcionTraducida(null);
+    setMostrarTraduccion(false);
+  }, [juego, esLocal]);
+
+  async function manejarTraducir() {
+    // Si ya se tradujo una vez para este juego, alternar entre las dos
+    // versiones no vuelve a pedirle nada a MyMemory — el texto traducido
+    // ya está guardado en descripcionTraducida.
+    if (descripcionTraducida) {
+      setMostrarTraduccion((actual) => !actual);
       return;
     }
 
-    setDescripcion(juego.description_raw);
     setTraduciendo(true);
-
-    traducirAlEspanol(juego.description_raw)
-      .then((texto) => setDescripcion(texto))
-      .catch((error) => {
-        console.error('Error al traducir la descripción:', error.message);
-      })
-      .finally(() => setTraduciendo(false));
-  }, [juego]);
+    try {
+      const texto = await traducirAlEspanol(descripcionOriginal);
+      setDescripcionTraducida(texto);
+      setMostrarTraduccion(true);
+    } catch (error) {
+      console.error('Error al traducir la descripción:', error.message);
+      mostrarAlerta('No se pudo traducir la descripción. Probá de nuevo.', 'error');
+    } finally {
+      setTraduciendo(false);
+    }
+  }
 
   async function manejarFavorito() {
     if (!juego) return;
@@ -176,29 +236,46 @@ function DetalleJuego() {
     return null;
   }
 
-  const generos = juego.genres?.map((genero) => genero.name).join(', ');
-  const plataformas = juego.platforms
-    ?.map((entrada) => entrada.platform?.name)
-    .filter(Boolean)
-    .join(', ');
+  // A partir de acá, todo lo que varía según el origen del juego se
+  // resuelve en estas pocas variables — el resto del JSX no vuelve a
+  // preguntar "esLocal" salvo en los dos bloques que no existen para
+  // nada (favorito y "Agregado por").
+  const nombre = esLocal ? juego.nombre_juego : juego.name;
+  const imagenFondo = esLocal ? juego.imagen_url : juego.background_image;
+  const lanzamiento = esLocal ? juego.anio_lanzamiento : juego.released;
 
-  // Requisitos de sistema: solo RAWG suele cargarlos para la entrada de
-  // PC (slug 'pc'); en consolas normalmente no existen, así que no hay
-  // nada raro en que esta sección no aparezca para muchos juegos.
-  const entradaPC = juego.platforms?.find((entrada) => entrada.platform?.slug === 'pc');
-  const requisitos = entradaPC?.requirements;
+  const generos = esLocal
+    ? juego.genero
+    : juego.genres?.map((genero) => genero.name).join(', ');
+
+  const plataformas = esLocal
+    ? juego.plataforma
+    : juego.platforms?.map((entrada) => entrada.platform?.name).filter(Boolean).join(', ');
+
+  // Requisitos de sistema: en RAWG hay que buscarlos adentro de
+  // "platforms" (solo la entrada de PC suele traerlos); en un juego
+  // local ya están sueltos en la fila, no hace falta buscar nada.
+  const requisitos = esLocal
+    ? { minimum: juego.requisitos_minimos, recommended: juego.requisitos_recomendados }
+    : juego.platforms?.find((entrada) => entrada.platform?.slug === 'pc')?.requirements;
   const hayRequisitos = requisitos && (requisitos.minimum || requisitos.recommended);
 
-  const descripcionLarga = descripcion.length > LARGO_MAXIMO_DESCRIPCION;
+  // El texto a mostrar depende de si el usuario pidió la traducción y
+  // ya está disponible — si no, se muestra siempre el original (nunca
+  // se traduce sola).
+  const textoDescripcion =
+    !esLocal && mostrarTraduccion && descripcionTraducida
+      ? descripcionTraducida
+      : descripcionOriginal;
+
+  const descripcionLarga = textoDescripcion.length > LARGO_MAXIMO_DESCRIPCION;
 
   // La imagen es distinta para cada juego, así que no puede vivir en un
   // archivo .css estático como el resto de los colores/estilos del
   // proyecto — por eso, y solo por eso, va como estilo inline acá. El
   // degradado que la oscurece y la funde con el fondo SÍ está en
   // detalleJuego.css, con las variables de color de siempre.
-  const estiloHero = juego.background_image
-    ? { backgroundImage: `url(${juego.background_image})` }
-    : undefined;
+  const estiloHero = imagenFondo ? { backgroundImage: `url(${imagenFondo})` } : undefined;
 
   return (
     <div className="detalle-juego">
@@ -209,25 +286,31 @@ function DetalleJuego() {
           </Link>
 
           <div className="detalle-juego-titulo">
-            <h1>{juego.name}</h1>
+            <h1>{nombre}</h1>
 
-            {/* RutaPrivada ya garantiza que solo se llega acá logueado, así
-                que usuario siempre existe cuando esto se renderiza. */}
-            <button
-              type="button"
-              className={favoritoId ? 'detalle-juego-favorito activo' : 'detalle-juego-favorito'}
-              onClick={manejarFavorito}
-              disabled={guardandoFavorito}
-            >
-              {favoritoId ? '★ En favoritos' : '☆ Agregar a favoritos'}
-            </button>
+            {/* Favoritos no está disponible para juegos locales (ver
+                comentario de cabecera). RutaPrivada ya garantiza que solo
+                se llega acá logueado cuando SÍ aplica, así que usuario
+                siempre existe en ese caso. */}
+            {!esLocal && (
+              <button
+                type="button"
+                className={
+                  favoritoId ? 'detalle-juego-favorito activo' : 'detalle-juego-favorito'
+                }
+                onClick={manejarFavorito}
+                disabled={guardandoFavorito}
+              >
+                {favoritoId ? '★ En favoritos' : '☆ Agregar a favoritos'}
+              </button>
+            )}
           </div>
 
           <div className="detalle-juego-meta">
-            {juego.released && (
+            {lanzamiento && (
               <div className="detalle-juego-meta-item">
                 <span className="detalle-juego-meta-etiqueta">Lanzamiento</span>
-                <span className="detalle-juego-meta-valor">{juego.released}</span>
+                <span className="detalle-juego-meta-valor">{lanzamiento}</span>
               </div>
             )}
             {juego.rating > 0 && (
@@ -254,6 +337,12 @@ function DetalleJuego() {
                 <span className="detalle-juego-meta-valor">{plataformas}</span>
               </div>
             )}
+            {esLocal && juego.nombre_autor && juego.mostrar_autor && (
+              <div className="detalle-juego-meta-item">
+                <span className="detalle-juego-meta-etiqueta">Agregado por</span>
+                <span className="detalle-juego-meta-valor">{juego.nombre_autor}</span>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -266,7 +355,7 @@ function DetalleJuego() {
               : 'detalle-juego-descripcion'
           }
         >
-          <p>{descripcion || 'Este juego todavía no tiene descripción.'}</p>
+          <p>{textoDescripcion || 'Este juego todavía no tiene descripción.'}</p>
         </div>
 
         {descripcionLarga && (
@@ -279,11 +368,25 @@ function DetalleJuego() {
           </button>
         )}
 
-        {traduciendo && (
-          <p className="detalle-juego-traduciendo">Traduciendo descripción...</p>
+        {/* Parte 15: traducción bajo demanda, no automática — el botón
+            no aparece para juegos locales (ya están en español) ni si no
+            hay ninguna descripción cargada. */}
+        {!esLocal && descripcionOriginal && (
+          <button
+            type="button"
+            className="detalle-juego-traducir"
+            onClick={manejarTraducir}
+            disabled={traduciendo}
+          >
+            {traduciendo
+              ? 'Traduciendo...'
+              : mostrarTraduccion
+                ? 'Ver original (inglés)'
+                : 'Traducir al español'}
+          </button>
         )}
 
-        <CarruselCapturas capturas={capturas} nombreJuego={juego.name} />
+        <CarruselCapturas capturas={capturas} nombreJuego={nombre} />
 
         {juego.ratings?.length > 0 && (
           <div className="detalle-juego-ratings">
@@ -326,6 +429,8 @@ function DetalleJuego() {
             </div>
           </div>
         )}
+
+        <ComentariosJuego juegoId={id} />
       </div>
     </div>
   );

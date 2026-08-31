@@ -27,13 +27,28 @@ import { borrarImagenJuego } from './servicioImagenes';
 
 // --- Usadas por SugerirJuego y MisSugerencias ---------------------------
 
-export async function crearSugerencia(usuarioId, { nombreJuego, plataforma, descripcion }) {
+// Parte 13: género y año pasan a ser las mismas columnas reales que ya
+// usa AgregarJuego (Parte 11) — antes viajaban como texto suelto dentro
+// de la descripción. Se suman linkReferencia (opcional) y mostrarAutor
+// (la preferencia de anonimato, con efecto real: la respeta DetalleJuego
+// al mostrar "Agregado por" en la vista pública).
+//
+// No se manda `estado` acá: el trigger forzar_estado_inicial_sugerencia
+// (Parte 11) decide 'pendiente'/'aprobado' mirando quién está logueado,
+// sin importar lo que mande el cliente.
+export async function crearSugerencia(
+  usuarioId,
+  { nombreJuego, plataforma, genero, anioLanzamiento, descripcion, linkReferencia, mostrarAutor }
+) {
   const { error } = await supabase.from('sugerencias').insert({
     usuario_id: usuarioId,
     nombre_juego: nombreJuego,
-    plataforma,
+    plataforma: plataforma || null,
+    genero: genero || null,
+    anio_lanzamiento: anioLanzamiento || null,
     descripcion,
-    estado: 'pendiente',
+    link_referencia: linkReferencia || null,
+    mostrar_autor: mostrarAutor,
   });
 
   if (error) {
@@ -53,6 +68,21 @@ export async function obtenerSugerenciasDeUsuario(usuarioId) {
   }
 
   return data;
+}
+
+// Parte 16: para el bloque de estadísticas del Perfil — mismo criterio
+// que contarFavoritos, sin traer los datos completos de cada fila.
+export async function contarSugerenciasDeUsuario(usuarioId) {
+  const { count, error } = await supabase
+    .from('sugerencias')
+    .select('id', { count: 'exact', head: true })
+    .eq('usuario_id', usuarioId);
+
+  if (error) {
+    throw new Error(`Error al contar sugerencias: ${error.message}`);
+  }
+
+  return count ?? 0;
 }
 
 // Un usuario común solo puede borrar sus propias sugerencias mientras
@@ -83,9 +113,14 @@ export async function eliminarSugerenciaPropia(id) {
 // --- Usadas por AdminSugerencias -----------------------------------------
 
 export async function obtenerTodasLasSugerencias() {
+  // Antes traía el nombre con un join (`usuarios(nombre)`). Desde la
+  // Parte 12 se usa la columna nombre_autor (una "foto" del nombre
+  // tomada al crear la fila, ver sql/parte-12-catalogo-comunidad.sql) —
+  // mismo dato, pero sin depender de la RLS de `usuarios`, que es lo que
+  // hacía falta para que el Catálogo público pudiera mostrarlo también.
   const { data, error } = await supabase
     .from('sugerencias')
-    .select('*, usuarios ( nombre )')
+    .select('*')
     .order('creado_en', { ascending: false });
 
   if (error) {
@@ -181,6 +216,51 @@ export async function obtenerJuegosAgregadosPorAdmin(usuarioId) {
 
   if (error) {
     throw new Error(`Error al traer tus juegos agregados: ${error.message}`);
+  }
+
+  return data;
+}
+
+// --- Usadas por Catalogo y DetalleJuego para juegos locales (Parte 12) --
+
+// Todos los juegos aprobados (agregados por un admin, o sugerencias de
+// usuario ya aprobadas) — la sección "Agregados por la comunidad" del
+// Catálogo. Público: no requiere sesión (ver la política de RLS nueva en
+// sql/parte-12-catalogo-comunidad.sql), porque el Catálogo tampoco la
+// pide.
+export async function obtenerJuegosLocalesPublicos() {
+  const { data, error } = await supabase
+    .from('sugerencias')
+    .select('*')
+    .eq('estado', 'aprobado')
+    .order('creado_en', { ascending: false });
+
+  if (error) {
+    throw new Error(`Error al traer los juegos de la comunidad: ${error.message}`);
+  }
+
+  return data;
+}
+
+// Un juego local puntual, para DetalleJuego. Se filtra también por
+// estado='aprobado' acá en el cliente (además de que la RLS ya lo exige)
+// para poder devolver un mensaje de error propio y claro si alguien
+// entra a la URL de un juego que fue rechazado o borrado después, en vez
+// de un array vacío sin explicación.
+export async function obtenerJuegoLocalPublicoPorId(id) {
+  const { data, error } = await supabase
+    .from('sugerencias')
+    .select('*')
+    .eq('id', id)
+    .eq('estado', 'aprobado')
+    .maybeSingle();
+
+  if (error) {
+    throw new Error(`Error al traer el juego: ${error.message}`);
+  }
+
+  if (!data) {
+    throw new Error('Este juego no existe o ya no está disponible.');
   }
 
   return data;

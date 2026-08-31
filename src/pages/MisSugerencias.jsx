@@ -10,12 +10,18 @@ import '../styles/listaSugerencias.css';
 import '../styles/cargando.css';
 
 /*
-  MisSugerencias — deja de ser placeholder en la Parte 6.
-  ----------------------------------------------------------
+  MisSugerencias — Parte 6 (placeholder → lista) + Parte 13 (género/año/
+  link como campos reales).
+  ----------------------------------------------------------------------
   Lista las sugerencias del usuario logueado con su estado (pendiente /
-  aprobado / rechazado), tal como estaba descrito desde el placeholder
-  original de la Parte 2. Si el admin dejó un comentario al aprobar o
+  aprobado / rechazado). Si el admin dejó un comentario al aprobar o
   rechazar (comentario_admin), se muestra debajo de la descripción.
+
+  Género, año y link de referencia ahora son columnas reales de
+  `sugerencias` (Parte 11 para género/año, Parte 13 para el link) — antes
+  de esta parte, el link viajaba como texto plano dentro de la
+  descripción y había que detectarlo con una expresión regular al
+  mostrarlo. Al ser un campo propio, alcanza con un <a> directo.
 
   Solo se puede eliminar una sugerencia propia mientras sigue 'pendiente'
   (la política de RLS en Supabase lo exige igual; acá simplemente no se
@@ -75,9 +81,26 @@ function MisSugerencias() {
               <BadgeEstado estado={sugerencia.estado} />
             </div>
 
-            {sugerencia.plataforma && (
+            <p className="tarjeta-sugerencia-meta">
+              {sugerencia.plataforma && `Plataforma: ${sugerencia.plataforma}`}
+              {sugerencia.genero && ` · Género: ${sugerencia.genero}`}
+              {sugerencia.anio_lanzamiento && ` · Año: ${sugerencia.anio_lanzamiento}`}
+              {' · '}
+              {sugerencia.mostrar_autor
+                ? 'Tu nombre se muestra públicamente si se aprueba'
+                : 'Tu nombre queda oculto si se aprueba'}
+            </p>
+
+            {sugerencia.link_referencia && (
               <p className="tarjeta-sugerencia-meta">
-                Plataforma: {sugerencia.plataforma}
+                <a
+                  href={sugerencia.link_referencia}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="tarjeta-sugerencia-link"
+                >
+                  {sugerencia.link_referencia}
+                </a>
               </p>
             )}
 

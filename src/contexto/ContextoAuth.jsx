@@ -7,6 +7,17 @@ import { supabase } from '../servicios/supabaseClient';
   directo a src/, sin tener que ir a buscar este archivo a un ZIP viejo.
 */
 
+/*
+  ContextoAuth — Parte 3, extendido en la Parte 16.
+  ---------------------------------------------------
+  Parte 16: el select de `usuarios` ahora trae también avatar_url y
+  portada_url (foto de perfil y fondo, elegidos por el usuario), y se
+  agrega refrescarPerfil() — Perfil.jsx la llama después de guardar una
+  foto nueva, para que tanto la propia pantalla de Perfil como el
+  círculo de AvatarMenu (en la barra superior) se actualicen sin
+  necesidad de recargar la página.
+*/
+
 const ContextoAuth = createContext(null);
 
 export function ProveedorAuth({ children }) {
@@ -27,25 +38,33 @@ export function ProveedorAuth({ children }) {
     return () => escucha.subscription.unsubscribe();
   }, []);
 
+  async function buscarPerfil(usuarioActual) {
+    const { data, error } = await supabase
+      .from('usuarios')
+      .select('nombre, rol, avatar_url, portada_url')
+      .eq('id', usuarioActual.id)
+      .single();
+
+    if (error) {
+      console.error('Error al buscar el perfil:', error.message);
+      return;
+    }
+    setPerfil(data);
+  }
+
   useEffect(() => {
     if (!usuario) {
       setPerfil(null);
       return;
     }
 
-    supabase
-      .from('usuarios')
-      .select('nombre, rol')
-      .eq('id', usuario.id)
-      .single()
-      .then(({ data, error }) => {
-        if (error) {
-          console.error('Error al buscar el perfil:', error.message);
-          return;
-        }
-        setPerfil(data);
-      });
+    buscarPerfil(usuario);
   }, [usuario]);
+
+  function refrescarPerfil() {
+    if (!usuario) return;
+    return buscarPerfil(usuario);
+  }
 
   async function iniciarSesion(email, contrasena) {
     const { error } = await supabase.auth.signInWithPassword({
@@ -77,6 +96,7 @@ export function ProveedorAuth({ children }) {
     iniciarSesion,
     registrarse,
     cerrarSesion,
+    refrescarPerfil,
   };
 
   return <ContextoAuth.Provider value={valor}>{children}</ContextoAuth.Provider>;

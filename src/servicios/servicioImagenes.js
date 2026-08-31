@@ -59,3 +59,52 @@ export async function borrarImagenJuego(urlPublica) {
     console.error('Error al borrar la imagen del bucket:', error.message);
   }
 }
+
+// --- Parte 16: foto de perfil y portada, elegidas por el usuario --------
+
+const BUCKET_PERFIL_USUARIOS = 'perfil-usuarios';
+
+// A diferencia de subirImagenJuego (nombre de archivo al azar, porque
+// puede haber muchas filas de sugerencias con imágenes distintas), acá el
+// nombre es siempre el mismo por usuario ("<id>/avatar.<ext>") y se sube
+// con upsert: true — cada usuario tiene como mucho un avatar, así que
+// reemplazar el archivo anterior es lo correcto, no acumular uno nuevo
+// por cada cambio.
+async function subirImagenDePerfil(usuarioId, archivo, nombreBase) {
+  // TEMPORAL — solo para diagnosticar, se saca después.
+  const { data: sesionActual } = await supabase.auth.getSession();
+  console.log('DEBUG sesión al subir imagen de perfil:', {
+    haySession: !!sesionActual.session,
+    userIdDeLaSesion: sesionActual.session?.user?.id,
+    usuarioIdRecibido: usuarioId,
+    coinciden: sesionActual.session?.user?.id === usuarioId,
+    expiraEn: sesionActual.session?.expires_at,
+  });
+
+  const extension = archivo.name.split('.').pop();
+  const ruta = `${usuarioId}/${nombreBase}.${extension}`;
+
+  const { error } = await supabase.storage
+    .from(BUCKET_PERFIL_USUARIOS)
+    .upload(ruta, archivo, { upsert: true });
+
+  if (error) {
+    throw new Error(`Error al subir la imagen: ${error.message}`);
+  }
+
+  const { data } = supabase.storage.from(BUCKET_PERFIL_USUARIOS).getPublicUrl(ruta);
+
+  // Como el nombre de archivo es siempre el mismo (upsert), la URL
+  // pública en sí no cambia entre una foto y la siguiente — sin este
+  // parámetro, el navegador podría seguir mostrando la imagen vieja
+  // desde su caché en vez de notar que el archivo cambió.
+  return `${data.publicUrl}?actualizado=${Date.now()}`;
+}
+
+export function subirAvatar(usuarioId, archivo) {
+  return subirImagenDePerfil(usuarioId, archivo, 'avatar');
+}
+
+export function subirPortada(usuarioId, archivo) {
+  return subirImagenDePerfil(usuarioId, archivo, 'portada');
+}

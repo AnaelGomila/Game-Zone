@@ -25,6 +25,25 @@
   font-size: 0.8rem;
 }
 
+/* Parte 16: variante redonda, para el avatar del Perfil. */
+.selector-imagen-preview-circular {
+  width: 130px;
+  height: 130px;
+  max-height: none;
+  border-radius: 50%;
+  margin: 0 auto;
+}
+
+.selector-imagen-vacio-circular {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  margin: 0 auto;
+  font-size: 0.7rem;
+  text-align: center;
+  padding: 0 0.5rem;
+}
+
 .selector-imagen input[type='file'] {
   font-size: 0.8rem;
   color: var(--color-texto-secundario);

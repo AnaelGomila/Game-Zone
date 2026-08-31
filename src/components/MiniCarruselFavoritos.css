@@ -1,0 +1,85 @@
+.mini-carrusel-favoritos-vacio {
+  color: var(--color-texto-secundario);
+  font-size: 0.9rem;
+}
+
+.mini-carrusel-favoritos-visor {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.mini-carrusel-favoritos-tarjeta {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  min-width: 0;
+  text-decoration: none;
+  color: var(--color-texto);
+}
+
+.mini-carrusel-favoritos-tarjeta img,
+.mini-carrusel-favoritos-sin-imagen {
+  width: 96px;
+  height: 96px;
+  object-fit: cover;
+  border-radius: var(--radio-borde);
+  flex-shrink: 0;
+}
+
+.mini-carrusel-favoritos-sin-imagen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-fondo);
+  color: var(--color-texto-secundario);
+  font-size: 0.7rem;
+}
+
+.mini-carrusel-favoritos-texto {
+  min-width: 0;
+}
+
+.mini-carrusel-favoritos-texto h3 {
+  margin: 0;
+  font-size: 1.05rem;
+  color: var(--color-primario);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mini-carrusel-favoritos-texto p {
+  margin: 0.3rem 0 0;
+  font-size: 0.85rem;
+  color: var(--color-texto-secundario);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mini-carrusel-favoritos-boton {
+  flex-shrink: 0;
+  width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 50%;
+  border: 1px solid var(--color-borde);
+  background-color: var(--color-fondo);
+  color: var(--color-texto);
+  font-size: 1.2rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.mini-carrusel-favoritos-boton:hover {
+  border-color: var(--color-secundario);
+  color: var(--color-secundario);
+}
+
+.mini-carrusel-favoritos-contador {
+  margin: 0.5rem 0 0;
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--color-texto-secundario);
+}

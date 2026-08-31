@@ -22,13 +22,14 @@ const FILTROS_ORIGEN = ['todos', 'usuarios', 'admins'];
   separada de AdminUsuarios (no tabs), como quedó decidido desde la
   Parte 1.
 
-  `sugerencias` viene con un join a `usuarios(nombre)` (ver
-  servicioSugerencias.obtenerTodasLasSugerencias) para poder mostrar quién
-  la propuso, sin necesitar un segundo pedido por cada fila. Esto sirve
-  igual para mostrar el nombre de un admin que agregó un juego (Parte
-  11): no hace falta ninguna columna nueva para "quién lo agregó", el
-  usuario_id de siempre ya apunta al admin cuando el que creó la fila fue
-  un admin.
+  `sugerencias` trae la columna nombre_autor (una "foto" del nombre de
+  quien la creó, tomada por un trigger de la base al insertar — ver
+  sql/parte-12-catalogo-comunidad.sql) para poder mostrar quién la
+  propuso sin necesitar un join a `usuarios` en cada consulta. Esto
+  sirve igual para mostrar el nombre de un admin que agregó un juego
+  (Parte 11): no hace falta ninguna columna aparte para "quién lo
+  agregó", nombre_autor ya apunta al admin cuando el que creó la fila
+  fue un admin.
 
   Parte 11: se agrega un segundo filtro (Origen: Todos/Usuarios/Admins),
   independiente del filtro por estado — un admin puede querer ver, por
@@ -167,7 +168,10 @@ function AdminSugerencias() {
 
                 <p className="tarjeta-sugerencia-meta">
                   {sugerencia.creado_por_admin ? 'Agregado por admin: ' : 'Propuesta por: '}
-                  {sugerencia.usuarios?.nombre || 'Usuario desconocido'}
+                  {sugerencia.nombre_autor || 'Usuario desconocido'}
+                  {!sugerencia.creado_por_admin && sugerencia.mostrar_autor === false && (
+                    <> (pidió no mostrar su nombre públicamente)</>
+                  )}
                   {sugerencia.plataforma && ` · Plataforma: ${sugerencia.plataforma}`}
                   {sugerencia.genero && ` · Género: ${sugerencia.genero}`}
                   {sugerencia.anio_lanzamiento && ` · Año: ${sugerencia.anio_lanzamiento}`}

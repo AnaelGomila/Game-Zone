@@ -34,3 +34,18 @@ export async function cambiarRolUsuario(id, nuevoRol) {
     throw new Error(`Error al cambiar el rol: ${error.message}`);
   }
 }
+
+// Parte 16: un usuario actualiza su propia fila (por ahora, avatar_url y/o
+// portada_url) — distinta de cambiarRolUsuario porque esta la llama
+// cualquier usuario sobre sí mismo, no un admin sobre otro. La política
+// de RLS "Usuarios actualizan su propio perfil" (sql/parte-16-...) es la
+// que garantiza que `cambios` nunca pueda tocar la fila de otro usuario,
+// y el trigger evitar_cambio_rol_no_admin (Parte 6) sigue protegiendo
+// `rol` independientemente de esto.
+export async function actualizarPerfilPropio(usuarioId, cambios) {
+  const { error } = await supabase.from('usuarios').update(cambios).eq('id', usuarioId);
+
+  if (error) {
+    throw new Error(`Error al actualizar el perfil: ${error.message}`);
+  }
+}

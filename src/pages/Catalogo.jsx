@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { obtenerJuegos, obtenerGeneros } from '../servicios/servicioRawg';
+import { obtenerJuegosLocalesPublicos } from '../servicios/servicioSugerencias';
+import { adaptarJuegoLocal } from '../servicios/adaptadorJuegoLocal';
 import TarjetaJuego from '../components/TarjetaJuego';
 import '../styles/catalogo.css';
 import '../styles/cargando.css';
@@ -20,6 +22,16 @@ import '../styles/cargando.css';
   orden: 'popular' (default) | 'rating' — desplegable "Ordenar por".
   genero: id de género de RAWG, o '' para "Todas" — desplegable
   "Categoría", con las opciones pedidas a obtenerGeneros() (Parte 7).
+
+  Parte 12: se agrega una sección "Agregados por la comunidad" debajo de
+  la grilla de RAWG, con los juegos aprobados que viven en la tabla
+  `sugerencias` (agregados por un admin, o sugerencias de usuario ya
+  aprobadas). Es intencionalmente independiente de la paginación/orden/
+  categoría de RAWG — se pide una sola vez, aparte, y no se mezcla con
+  esos resultados. Los filtros "Ordenar por" y "Categoría" son conceptos
+  específicos de la API de RAWG (ordering, id de género de RAWG) y no se
+  aplican acá; el único filtro que si se comparte es la búsqueda global
+  de la barra superior, comparando el texto contra el nombre del juego.
 */
 function Catalogo() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -37,10 +49,26 @@ function Catalogo() {
 
   const [generos, setGeneros] = useState([]);
 
+  const [juegosComunidad, setJuegosComunidad] = useState([]);
+  const [cargandoComunidad, setCargandoComunidad] = useState(true);
+
   useEffect(() => {
     obtenerGeneros()
       .then((resultado) => setGeneros(resultado))
       .catch((error) => console.error('Error al traer géneros:', error.message));
+  }, []);
+
+  // Se pide una sola vez (no depende de pagina/orden/genero, esos son
+  // conceptos de RAWG); si hay una búsqueda activa, se filtra en el
+  // cliente por nombre — no vale la pena un pedido aparte a Supabase por
+  // cada letra tipeada, dado que en la práctica va a ser una lista corta.
+  useEffect(() => {
+    obtenerJuegosLocalesPublicos()
+      .then((resultado) => setJuegosComunidad(resultado))
+      .catch((error) =>
+        console.error('Error al traer juegos de la comunidad:', error.message)
+      )
+      .finally(() => setCargandoComunidad(false));
   }, []);
 
   useEffect(() => {
@@ -92,6 +120,14 @@ function Catalogo() {
     nuevos.set('pagina', String(nuevaPagina));
     setSearchParams(nuevos);
   }
+
+  const juegosComunidadFiltrados = busqueda
+    ? juegosComunidad.filter((sugerencia) =>
+        sugerencia.nombre_juego.toLowerCase().includes(busqueda.toLowerCase())
+      )
+    : juegosComunidad;
+
+  const juegosComunidadAdaptados = juegosComunidadFiltrados.map(adaptarJuegoLocal);
 
   return (
     <div className="catalogo">
@@ -168,6 +204,17 @@ function Catalogo() {
             </div>
           )}
         </>
+      )}
+
+      {!cargandoComunidad && juegosComunidadAdaptados.length > 0 && (
+        <div className="catalogo-comunidad">
+          <h2>Agregados por la comunidad</h2>
+          <div className="catalogo-grid">
+            {juegosComunidadAdaptados.map((juego) => (
+              <TarjetaJuego key={juego.id} juego={juego} />
+            ))}
+          </div>
+        </div>
       )}
     </div>
   );

@@ -103,6 +103,19 @@ function ModalEditarSugerencia({ sugerencia, onCerrar, onGuardado }) {
   return (
     <Modal titulo="Editar sugerencia" onCerrar={onCerrar}>
       <form className="formulario-auth-modal" onSubmit={manejarEnvio} noValidate>
+        {/* Parte 13: link_referencia es un dato que dejó el usuario para
+            ayudar a identificar el juego exacto — se muestra de solo
+            lectura acá (no es un campo editable), como ayuda para
+            completar el resto del formulario. */}
+        {sugerencia.link_referencia && (
+          <p className="formulario-auth-modal-ayuda">
+            Link de referencia del usuario:{' '}
+            <a href={sugerencia.link_referencia} target="_blank" rel="noopener noreferrer">
+              {sugerencia.link_referencia}
+            </a>
+          </p>
+        )}
+
         <label htmlFor="editarNombre">Nombre del juego</label>
         <input
           id="editarNombre"

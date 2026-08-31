@@ -74,3 +74,18 @@ export const coincideCon =
   (otroValor, mensaje = 'Los valores no coinciden') =>
   (valor) =>
     valor !== otroValor ? mensaje : '';
+
+// Solo valida el formato si hay algo cargado — pensada para campos de
+// link opcionales (ej: linkReferencia en SugerirJuego), donde dejar el
+// campo vacío es válido pero completarlo con algo que no es una URL, no.
+export const urlValida =
+  (mensaje = 'Ingresá un link válido (ej: https://...)') =>
+  (valor) => {
+    if (!valor || !String(valor).trim()) return '';
+    try {
+      new URL(valor);
+      return '';
+    } catch {
+      return mensaje;
+    }
+  };

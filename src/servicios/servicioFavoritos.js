@@ -88,3 +88,19 @@ export async function quitarFavorito(favoritoId) {
     throw new Error(`Error al quitar de favoritos: ${error.message}`);
   }
 }
+
+// Parte 16: cuenta favoritos sin traer los datos completos de cada uno —
+// la usa el bloque de estadísticas del Perfil. `head: true` le dice a
+// Supabase que no devuelva filas, solo el número.
+export async function contarFavoritos(usuarioId) {
+  const { count, error } = await supabase
+    .from('favoritos')
+    .select('id', { count: 'exact', head: true })
+    .eq('usuario_id', usuarioId);
+
+  if (error) {
+    throw new Error(`Error al contar favoritos: ${error.message}`);
+  }
+
+  return count ?? 0;
+}
