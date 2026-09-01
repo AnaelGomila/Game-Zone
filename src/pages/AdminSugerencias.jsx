@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useAlerta } from '../contexto/ContextoAlerta';
 import {
   obtenerTodasLasSugerencias,
@@ -168,7 +169,9 @@ function AdminSugerencias() {
 
                 <p className="tarjeta-sugerencia-meta">
                   {sugerencia.creado_por_admin ? 'Agregado por admin: ' : 'Propuesta por: '}
-                  {sugerencia.nombre_autor || 'Usuario desconocido'}
+                  <Link to={`/usuario/${sugerencia.usuario_id}`}>
+                    {sugerencia.nombre_autor || 'Usuario desconocido'}
+                  </Link>
                   {!sugerencia.creado_por_admin && sugerencia.mostrar_autor === false && (
                     <> (pidió no mostrar su nombre públicamente)</>
                   )}

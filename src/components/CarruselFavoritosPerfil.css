@@ -1,0 +1,74 @@
+.carrusel-favoritos-perfil-vacio {
+  color: var(--color-texto-secundario);
+  font-size: 0.9rem;
+}
+
+.carrusel-favoritos-perfil-visor {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.carrusel-favoritos-perfil-grilla {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+/* Acá las tarjetas quedan bastante más anchas que en el Catálogo (2
+   columnas contra una grilla de auto-fill más angosta), y TarjetaJuego
+   fija su imagen en 140px de alto sin importar el ancho — con una
+   tarjeta más ancha, ese mismo alto recorta mucho más de la imagen que
+   en el Catálogo. Se sube el alto acá (sin tocar TarjetaJuego.css, que
+   se usa en todo el proyecto) y se ancla arriba (object-position: top,
+   mismo recurso que ya se usó para el hero de DetalleJuego) para que el
+   recorte se saque de abajo en vez de perder la parte de arriba de la
+   imagen. */
+.carrusel-favoritos-perfil-grilla .tarjeta-juego img {
+  height: 220px;
+  object-position: top;
+}
+
+.carrusel-favoritos-perfil-grilla .tarjeta-juego-sin-imagen {
+  height: 220px;
+}
+
+/* Con una sola tarjeta en la última página (cantidad impar de favoritos),
+   que no se estire a lo ancho de las dos columnas — se ve mejor angosta,
+   del mismo tamaño que las demás. */
+.carrusel-favoritos-perfil-grilla:has(> :only-child) {
+  grid-template-columns: 1fr;
+  max-width: 260px;
+}
+
+.carrusel-favoritos-perfil-boton {
+  flex-shrink: 0;
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: 50%;
+  border: 1px solid var(--color-borde);
+  background-color: var(--color-fondo);
+  color: var(--color-texto);
+  font-size: 1.3rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.carrusel-favoritos-perfil-boton:hover {
+  border-color: var(--color-perfil-acento, var(--color-secundario));
+  color: var(--color-perfil-acento, var(--color-secundario));
+}
+
+.carrusel-favoritos-perfil-contador {
+  margin: 0.6rem 0 0;
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--color-texto-secundario);
+}
+
+@media (max-width: 560px) {
+  .carrusel-favoritos-perfil-grilla {
+    grid-template-columns: 1fr;
+  }
+}

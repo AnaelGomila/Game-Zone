@@ -41,7 +41,9 @@ export function ProveedorAuth({ children }) {
   async function buscarPerfil(usuarioActual) {
     const { data, error } = await supabase
       .from('usuarios')
-      .select('nombre, rol, avatar_url, portada_url')
+      .select(
+        'nombre, rol, avatar_url, portada_url, nickname, nacionalidad, redes_sociales, titulo_admin, color_texto'
+      )
       .eq('id', usuarioActual.id)
       .single();
 

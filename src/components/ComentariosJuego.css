@@ -76,6 +76,11 @@
   font-weight: bold;
   color: var(--color-secundario);
   font-size: 0.85rem;
+  text-decoration: none;
+}
+
+.comentario-autor:hover {
+  text-decoration: underline;
 }
 
 .comentario-fecha {

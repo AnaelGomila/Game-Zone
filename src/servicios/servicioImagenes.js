@@ -1,4 +1,5 @@
 import { supabase } from './supabaseClient';
+import { redimensionarImagenSiHaceFalta } from '../utils/redimensionarImagen';
 
 /*
   servicioImagenes.js — nuevo en la Parte 11.
@@ -70,18 +71,22 @@ const BUCKET_PERFIL_USUARIOS = 'perfil-usuarios';
 // con upsert: true — cada usuario tiene como mucho un avatar, así que
 // reemplazar el archivo anterior es lo correcto, no acumular uno nuevo
 // por cada cambio.
-async function subirImagenDePerfil(usuarioId, archivo, nombreBase) {
-  // TEMPORAL — solo para diagnosticar, se saca después.
-  const { data: sesionActual } = await supabase.auth.getSession();
-  console.log('DEBUG sesión al subir imagen de perfil:', {
-    haySession: !!sesionActual.session,
-    userIdDeLaSesion: sesionActual.session?.user?.id,
-    usuarioIdRecibido: usuarioId,
-    coinciden: sesionActual.session?.user?.id === usuarioId,
-    expiraEn: sesionActual.session?.expires_at,
-  });
-
-  const extension = archivo.name.split('.').pop();
+// A diferencia de subirImagenJuego (nombre de archivo al azar, porque
+// puede haber muchas filas de sugerencias con imágenes distintas), acá el
+// nombre es siempre el mismo por usuario ("<id>/avatar.<ext>") y se sube
+// con upsert: true — cada usuario tiene como mucho un avatar, así que
+// reemplazar el archivo anterior es lo correcto, no acumular uno nuevo
+// por cada cambio.
+//
+// Parte 17: antes de subir, se redimensiona si hace falta (ver
+// utils/redimensionarImagen.js) — evita subir fotos de celular enormes
+// sin necesidad, conservando alta calidad. Si terminó redimensionada, se
+// recodificó como JPEG, así que la extensión del archivo final puede no
+// coincidir con la del original — se usa 'jpg' en ese caso.
+async function subirImagenDePerfil(usuarioId, archivoOriginal, nombreBase) {
+  const archivo = await redimensionarImagenSiHaceFalta(archivoOriginal);
+  const fueRedimensionado = archivo !== archivoOriginal;
+  const extension = fueRedimensionado ? 'jpg' : archivoOriginal.name.split('.').pop();
   const ruta = `${usuarioId}/${nombreBase}.${extension}`;
 
   const { error } = await supabase.storage

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../contexto/ContextoAuth';
 import { useAlerta } from '../contexto/ContextoAlerta';
 import {
@@ -101,7 +102,9 @@ function ComentariosJuego({ juegoId }) {
         comentarios.map((comentario) => (
           <div key={comentario.id} className="comentario">
             <div className="comentario-encabezado">
-              <span className="comentario-autor">{comentario.nombre_autor || 'Usuario'}</span>
+              <Link to={`/usuario/${comentario.usuario_id}`} className="comentario-autor">
+                {comentario.nombre_autor || 'Usuario'}
+              </Link>
               <span className="comentario-fecha">
                 {new Date(comentario.creado_en).toLocaleDateString('es-AR')}
               </span>

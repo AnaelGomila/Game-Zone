@@ -340,7 +340,9 @@ function DetalleJuego() {
             {esLocal && juego.nombre_autor && juego.mostrar_autor && (
               <div className="detalle-juego-meta-item">
                 <span className="detalle-juego-meta-etiqueta">Agregado por</span>
-                <span className="detalle-juego-meta-valor">{juego.nombre_autor}</span>
+                <span className="detalle-juego-meta-valor">
+                  <Link to={`/usuario/${juego.usuario_id}`}>{juego.nombre_autor}</Link>
+                </span>
               </div>
             )}
           </div>

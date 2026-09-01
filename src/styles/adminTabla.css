@@ -70,3 +70,26 @@
   opacity: 0.5;
   cursor: not-allowed;
 }
+
+/* Parte 17: celda de título — input + botón "Guardar" chico, en fila. */
+.admin-tabla-titulo {
+  display: flex;
+  gap: 0.4rem;
+  align-items: center;
+}
+
+.admin-tabla-titulo input {
+  flex: 1;
+  min-width: 100px;
+  padding: 0.35rem 0.5rem;
+  border-radius: var(--radio-borde);
+  border: 1px solid var(--color-borde);
+  background-color: var(--color-fondo);
+  color: var(--color-texto);
+  font-family: var(--fuente-base);
+  font-size: 0.8rem;
+}
+
+.admin-tabla-titulo input:focus {
+  outline: 2px solid var(--color-secundario);
+}

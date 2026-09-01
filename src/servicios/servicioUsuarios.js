@@ -17,7 +17,7 @@ import { supabase } from './supabaseClient';
 export async function obtenerTodosLosUsuarios() {
   const { data, error } = await supabase
     .from('usuarios')
-    .select('id, nombre, rol')
+    .select('id, nombre, rol, titulo_admin')
     .order('nombre', { ascending: true });
 
   if (error) {
@@ -47,5 +47,42 @@ export async function actualizarPerfilPropio(usuarioId, cambios) {
 
   if (error) {
     throw new Error(`Error al actualizar el perfil: ${error.message}`);
+  }
+}
+
+// Parte 17: trae el perfil público de CUALQUIER usuario (no solo el
+// propio) — la usa Perfil.jsx cuando se entra a /usuario/:id. Funciona
+// gracias a la política de RLS nueva "Usuarios logueados ven cualquier
+// perfil" (sql/parte-17-perfil-publico.sql). No se pide el email acá
+// tampoco: sigue sin existir en esta tabla, ver nota de arriba.
+export async function obtenerUsuarioPorId(id) {
+  const { data, error } = await supabase
+    .from('usuarios')
+    .select(
+      'id, nombre, nickname, nacionalidad, rol, avatar_url, portada_url, redes_sociales, titulo_admin, color_texto'
+    )
+    .eq('id', id)
+    .single();
+
+  if (error) {
+    throw new Error(`Error al traer el perfil: ${error.message}`);
+  }
+
+  return data;
+}
+
+// Parte 17: título cosmético que un admin le puede poner a cualquier
+// usuario (o a sí mismo) desde AdminUsuarios — no es lo mismo que `rol`
+// (que controla permisos). Queda reforzado por el trigger
+// evitar_cambio_titulo_admin_no_admin (sql/parte-17-...), que revierte
+// cualquier intento de cambiarlo desde una cuenta que no sea admin.
+export async function actualizarTituloAdmin(id, titulo) {
+  const { error } = await supabase
+    .from('usuarios')
+    .update({ titulo_admin: titulo || null })
+    .eq('id', id);
+
+  if (error) {
+    throw new Error(`Error al actualizar el título: ${error.message}`);
   }
 }

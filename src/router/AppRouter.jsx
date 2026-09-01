@@ -29,6 +29,9 @@ import RutaAdmin from './RutaAdmin';
   formulario propio del admin para agregar juegos directamente, sin
   pasar por el flujo de sugerencia+revisión que usan los usuarios
   comunes en /sugerir.
+
+  Parte 17: se agrega /usuario/:id (perfil público de otro usuario),
+  reusando el mismo componente Perfil que ya usa /perfil.
 */
 function AppRouter() {
   return (
@@ -50,6 +53,17 @@ function AppRouter() {
       />
       <Route
         path="/perfil"
+        element={
+          <RutaPrivada>
+            <Perfil />
+          </RutaPrivada>
+        }
+      />
+      {/* Parte 17: mismo componente que /perfil — Perfil.jsx lee el
+          parámetro :id con useParams() para decidir si muestra el
+          propio perfil (sin id, en /perfil) o el de otro usuario. */}
+      <Route
+        path="/usuario/:id"
         element={
           <RutaPrivada>
             <Perfil />

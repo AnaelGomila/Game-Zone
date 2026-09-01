@@ -85,6 +85,25 @@ export async function contarSugerenciasDeUsuario(usuarioId) {
   return count ?? 0;
 }
 
+// Parte 17: versión para el perfil PÚBLICO de otro usuario — solo cuenta
+// las aprobadas. A diferencia de tu propio Perfil (que puede mostrar el
+// total, incluidas pendientes/rechazadas, porque son tuyas), no tendría
+// sentido que cualquiera viera cuántas sugerencias rechazadas mandó otra
+// persona.
+export async function contarSugerenciasAprobadasDeUsuario(usuarioId) {
+  const { count, error } = await supabase
+    .from('sugerencias')
+    .select('id', { count: 'exact', head: true })
+    .eq('usuario_id', usuarioId)
+    .eq('estado', 'aprobado');
+
+  if (error) {
+    throw new Error(`Error al contar sugerencias: ${error.message}`);
+  }
+
+  return count ?? 0;
+}
+
 // Un usuario común solo puede borrar sus propias sugerencias mientras
 // siguen en estado 'pendiente' (la policy de RLS lo exige igual, esto
 // evita mandar un pedido que sabemos que va a fallar).

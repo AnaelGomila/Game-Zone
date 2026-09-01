@@ -7,7 +7,7 @@ const MAXIMO_A_MOSTRAR = 5;
 
 /*
   ResumenJuegosAgregados — reemplaza a CarruselJuegosAgregados (Parte 11)
-  en la Parte 16.
+  en la Parte 16, extendido en la Parte 17 para el perfil público.
   ------------------------------------------------------------------------
   Antes era un carrusel (de a un juego, con ‹ › y contador). Se cambió a
   una grilla estática de hasta 5 juegos + un link "Ver todos" que lleva a
@@ -15,13 +15,26 @@ const MAXIMO_A_MOSTRAR = 5;
   duplicar en el Perfil la misma navegación que ya existe en ese panel;
   alcanza con una muestra chica acá y mandarlo al lugar real para ver el
   resto.
+
+  Parte 17: se agrega `esPropio`. El link "Ver todos en Admin:
+  Sugerencias" solo tiene sentido si quien está mirando es admin (esa
+  ruta usa RutaAdmin — un usuario común que la clickeara terminaría
+  redirigido) y es SU PROPIO perfil (no tendría sentido mandarlo al panel
+  de sugerencias de otra persona). Los juegos en sí (la grilla) se siguen
+  mostrando igual para cualquiera, porque ya son públicos.
 */
-function ResumenJuegosAgregados({ juegos }) {
+function ResumenJuegosAgregados({ juegos, esPropio }) {
   if (!juegos || juegos.length === 0) {
     return (
       <p className="resumen-juegos-agregados-vacio">
-        Todavía no agregaste ningún juego.{' '}
-        <Link to="/admin/agregar-juego">Agregar uno</Link>
+        {esPropio ? (
+          <>
+            Todavía no agregaste ningún juego.{' '}
+            <Link to="/admin/agregar-juego">Agregar uno</Link>
+          </>
+        ) : (
+          'Todavía no agregó ningún juego.'
+        )}
       </p>
     );
   }
@@ -50,9 +63,11 @@ function ResumenJuegosAgregados({ juegos }) {
         ))}
       </div>
 
-      <Link to="/admin/sugerencias" className="resumen-juegos-agregados-ver-mas">
-        Ver todos en Admin: Sugerencias →
-      </Link>
+      {esPropio && (
+        <Link to="/admin/sugerencias" className="resumen-juegos-agregados-ver-mas">
+          Ver todos en Admin: Sugerencias →
+        </Link>
+      )}
     </div>
   );
 }
