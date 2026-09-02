@@ -10,6 +10,45 @@
   padding: 1rem 0.6rem;
 }
 
+/* En desktop no se usa — display: none por defecto. Por debajo del
+   breakpoint mobile es el fondo oscuro que aparece detrás del panel
+   cuando está abierto; clickearlo lo cierra (ver Sidebar.jsx). */
+.sidebar-overlay {
+  display: none;
+}
+
+/* Responsive: por debajo de este ancho, la sidebar deja de ocupar
+   espacio fijo en el layout (se sacaría 200px de ancho útil en una
+   pantalla que ya es angosta) y pasa a ser un panel que se desliza
+   desde la izquierda, oculto por defecto (translateX(-100%)) y visible
+   solo cuando se abre con el botón hamburguesa de BarraSuperior. */
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    top: var(--alto-barra-superior);
+    left: 0;
+    width: 240px;
+    height: calc(100vh - var(--alto-barra-superior));
+    z-index: 250;
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+  }
+
+  .sidebar-abierta {
+    transform: translateX(0);
+    box-shadow: 4px 0 18px rgba(0, 0, 0, 0.45);
+  }
+
+  .sidebar-overlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    top: var(--alto-barra-superior);
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 240;
+  }
+}
+
 .sidebar-nav {
   display: flex;
   flex-direction: column;
@@ -31,6 +70,50 @@
 }
 
 .sidebar-nav a.activo {
+  background-color: var(--color-fondo);
+  color: var(--color-primario);
+  font-weight: bold;
+}
+
+/* Sección de filtros por género — solo aparece en Catálogo/Favoritos
+   (ver Sidebar.jsx). Mismos botones que la nav de arriba, pero como
+   <button> en vez de <NavLink> (no navegan a otra ruta, solo cambian el
+   query param "genero" de la pantalla actual). */
+.sidebar-filtros {
+  margin-top: 1.2rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-borde);
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.sidebar-filtros-titulo {
+  margin: 0 0 0.4rem 0.8rem;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--color-texto-secundario);
+}
+
+.sidebar-filtros button {
+  text-align: left;
+  padding: 0.5rem 0.8rem;
+  border: none;
+  border-radius: var(--radio-borde);
+  background-color: transparent;
+  color: var(--color-texto-secundario);
+  font-family: var(--fuente-base);
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.sidebar-filtros button:hover {
+  background-color: var(--color-fondo);
+  color: var(--color-texto);
+}
+
+.sidebar-filtros button.activo {
   background-color: var(--color-fondo);
   color: var(--color-primario);
   font-weight: bold;

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { obtenerJuegos, obtenerGeneros } from '../servicios/servicioRawg';
+import { obtenerJuegos } from '../servicios/servicioRawg';
 import { obtenerJuegosLocalesPublicos } from '../servicios/servicioSugerencias';
 import { adaptarJuegoLocal } from '../servicios/adaptadorJuegoLocal';
 import TarjetaJuego from '../components/TarjetaJuego';
@@ -19,9 +19,15 @@ import '../styles/cargando.css';
   tener que pasarse props ni usar otro Context, y la URL queda
   compartible/recargable con los mismos filtros aplicados.
 
-  orden: 'popular' (default) | 'rating' — desplegable "Ordenar por".
-  genero: id de género de RAWG, o '' para "Todas" — desplegable
-  "Categoría", con las opciones pedidas a obtenerGeneros() (Parte 7).
+  orden: 'popular' (default) | 'rating' — desplegable "Ordenar por", el
+  único filtro que sigue viviendo acá adentro.
+
+  genero: id de género de RAWG, o '' para "Todas" — este filtro se sacó
+  del desplegable local (que existía desde la Parte 7) y ahora vive en
+  la Sidebar (aparece solo en /catalogo y /favoritos, ver Sidebar.jsx).
+  Catalogo.jsx sigue leyendo el mismo query param "genero" de la URL, sin
+  ningún cambio en la lógica de pedido a RAWG — lo único que cambió es
+  quién escribe ese valor.
 
   Parte 12: se agrega una sección "Agregados por la comunidad" debajo de
   la grilla de RAWG, con los juegos aprobados que viven en la tabla
@@ -47,16 +53,8 @@ function Catalogo() {
   const [hayPaginaSiguiente, setHayPaginaSiguiente] = useState(false);
   const [hayPaginaAnterior, setHayPaginaAnterior] = useState(false);
 
-  const [generos, setGeneros] = useState([]);
-
   const [juegosComunidad, setJuegosComunidad] = useState([]);
   const [cargandoComunidad, setCargandoComunidad] = useState(true);
-
-  useEffect(() => {
-    obtenerGeneros()
-      .then((resultado) => setGeneros(resultado))
-      .catch((error) => console.error('Error al traer géneros:', error.message));
-  }, []);
 
   // Se pide una sola vez (no depende de pagina/orden/genero, esos son
   // conceptos de RAWG); si hay una búsqueda activa, se filtra en el
@@ -139,21 +137,6 @@ function Catalogo() {
           <select value={orden} onChange={(evento) => actualizarParametro('orden', evento.target.value)}>
             <option value="popular">Más popular</option>
             <option value="rating">Mejor calificados</option>
-          </select>
-        </label>
-
-        <label>
-          Categoría
-          <select
-            value={generoId}
-            onChange={(evento) => actualizarParametro('genero', evento.target.value)}
-          >
-            <option value="">Todas</option>
-            {generos.map((genero) => (
-              <option key={genero.id} value={genero.id}>
-                {genero.nombre}
-              </option>
-            ))}
           </select>
         </label>
       </div>
