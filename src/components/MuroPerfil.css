@@ -1,0 +1,132 @@
+.muro-perfil-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1.2rem;
+}
+
+.muro-perfil-form textarea {
+  padding: 0.5rem 0.6rem;
+  border-radius: var(--radio-borde);
+  border: 1px solid var(--color-borde);
+  background-color: rgba(0, 0, 0, 0.25);
+  color: var(--color-texto);
+  font-family: var(--fuente-base);
+  resize: vertical;
+}
+
+.muro-perfil-form textarea:focus {
+  outline: 2px solid var(--color-perfil-acento, var(--color-secundario));
+}
+
+.muro-perfil-form button {
+  align-self: flex-end;
+  padding: 0.5rem 1.1rem;
+  border: none;
+  border-radius: var(--radio-borde);
+  background-color: var(--color-perfil-acento, var(--color-primario));
+  color: var(--color-fondo);
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.muro-perfil-form button:hover:not(:disabled) {
+  filter: brightness(0.9);
+}
+
+.muro-perfil-form button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.muro-perfil-cargando,
+.muro-perfil-vacio {
+  color: var(--color-texto-secundario);
+  font-size: 0.85rem;
+}
+
+.mensaje-perfil {
+  padding: 0.8rem 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.mensaje-perfil-encabezado {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.mensaje-perfil-autor {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: bold;
+  color: var(--color-perfil-acento, var(--color-secundario));
+  font-size: 0.85rem;
+  text-decoration: none;
+}
+
+.mensaje-perfil-autor:hover {
+  text-decoration: underline;
+}
+
+/* Insignia chica junto al nombre cuando quien escribió era admin en ese
+   momento — mismo dato (autor_es_admin) que usa la regla de moderación
+   de más abajo, acá solo es informativo. */
+.mensaje-perfil-badge-admin {
+  padding: 0.1rem 0.5rem;
+  border-radius: 999px;
+  background-color: rgba(0, 0, 0, 0.35);
+  color: var(--color-primario);
+  font-size: 0.65rem;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.mensaje-perfil-fecha {
+  font-size: 0.75rem;
+  color: var(--color-texto-secundario);
+}
+
+.mensaje-perfil-contenido {
+  font-size: 0.9rem;
+  margin: 0.3rem 0 0;
+  white-space: pre-wrap;
+}
+
+.mensaje-perfil-eliminar {
+  margin-top: 0.4rem;
+  padding: 0.2rem 0.6rem;
+  border: 1px solid var(--color-error);
+  border-radius: var(--radio-borde);
+  background-color: transparent;
+  color: var(--color-error);
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+
+.mensaje-perfil-eliminar:hover {
+  background-color: var(--color-error);
+  color: var(--color-fondo);
+}
+
+/* "Desplegable": expande/colapsa la lista completa, ya cargada en
+   memoria — no dispara ningún pedido nuevo. */
+.muro-perfil-ver-mas {
+  display: block;
+  margin: 1rem auto 0;
+  padding: 0.4rem 1rem;
+  border: 1px solid var(--color-perfil-acento, var(--color-borde));
+  border-radius: var(--radio-borde);
+  background-color: transparent;
+  color: var(--color-perfil-acento, var(--color-secundario));
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.muro-perfil-ver-mas:hover {
+  background-color: var(--color-perfil-acento, var(--color-secundario));
+  color: var(--color-fondo);
+}

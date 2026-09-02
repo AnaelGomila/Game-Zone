@@ -14,6 +14,7 @@ import ModalCambiarContrasena from '../components/ModalCambiarContrasena';
 import ModalEditarPerfil from '../components/ModalEditarPerfil';
 import ResumenJuegosAgregados from '../components/ResumenJuegosAgregados';
 import CarruselFavoritosPerfil from '../components/CarruselFavoritosPerfil';
+import MuroPerfil from '../components/MuroPerfil';
 import '../styles/perfil.css';
 
 /*
@@ -40,6 +41,11 @@ import '../styles/perfil.css';
   que quiera adoptar el color elegido por esa persona, no solo en el
   nickname — si no eligió ninguno, cae en el naranja del tema por
   defecto.
+
+  Parte 18: se agrega <MuroPerfil> al final del panel — la "Parte B" del
+  sistema de comentarios que había quedado pendiente desde la Parte 14.
+  Recibe perfilId={idUsuarioAMostrar}, así que funciona igual sea el
+  perfil propio o el de otro usuario, sin ninguna distinción extra acá.
 */
 function Perfil() {
   const { id: idParam } = useParams();
@@ -273,6 +279,11 @@ function Perfil() {
               )}
             </div>
           )}
+
+          <div className="perfil-seccion">
+            <span className="perfil-etiqueta">Muro</span>
+            <MuroPerfil perfilId={idUsuarioAMostrar} />
+          </div>
         </div>
       </div>
 

@@ -1,7 +1,17 @@
 .perfil {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 2rem 1.5rem;
+  /* Antes: max-width: 1100px fijo. En una pantalla muy ancha eso deja
+     margen a los costados (se ve el fondo), pero en una notebook, donde
+     el espacio junto a la sidebar ya ronda esos 1100px, el panel termina
+     ocupando casi todo el ancho igual — no es un problema de "mobile",
+     es que un número fijo no se adapta a resoluciones intermedias.
+
+     min(92%, 1100px): el panel ocupa como mucho el 92% del ancho
+     disponible (dejando ~4% de margen a cada lado en CUALQUIER
+     resolución, no solo en pantallas grandes), pero nunca pasa de
+     1100px en monitores muy anchos, para que no quede exagerado. */
+  width: min(92%, 1100px);
+  margin: 2rem auto;
+  padding: 0 0.5rem;
   font-family: var(--fuente-base);
   color: var(--color-texto);
 }
@@ -22,7 +32,7 @@
   content: '';
   position: absolute;
   inset: 0;
-  background-color: rgba(23, 24, 28, 0.72);
+  
 }
 
 .perfil-fondo-vacio {
@@ -238,7 +248,9 @@
 
 @media (max-width: 720px) {
   .perfil {
-    padding: 1.2rem 1rem;
+    width: 96%;
+    margin: 1.2rem auto;
+    padding: 0;
   }
 
   .perfil-panel {
@@ -260,6 +272,10 @@
   .perfil-acciones {
     width: 100%;
     align-items: center;
+  }
+
+  .perfil-acciones button {
+    width: 100%;
   }
 
   .perfil-avatar-grande {
