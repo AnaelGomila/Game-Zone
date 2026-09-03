@@ -1,0 +1,126 @@
+.juego-adivinanza {
+  max-width: 560px;
+  margin: 1.5rem auto 0;
+}
+
+.juego-adivinanza-progreso {
+  text-align: center;
+  color: var(--color-texto-secundario);
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.juego-adivinanza-imagen-contenedor {
+  width: 100%;
+  height: 280px;
+  border-radius: var(--radio-borde);
+  overflow: hidden;
+  background-color: var(--color-fondo-alt);
+  border: 1px solid var(--color-borde);
+}
+
+.juego-adivinanza-imagen {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: filter 0.4s ease;
+}
+
+/* El desenfoque se saca apenas se contesta (seleccion deja de ser null,
+   ver JuegoAdivinanza.jsx) — scale(1.08) evita que se noten los bordes
+   nítidos de la imagen por el recorte que hace el blur en los costados. */
+.juego-adivinanza-imagen.borrosa {
+  filter: blur(20px);
+  transform: scale(1.08);
+}
+
+.juego-adivinanza-opciones {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.8rem;
+  margin-top: 1.2rem;
+}
+
+.juego-adivinanza-opciones button {
+  padding: 0.8rem 1rem;
+  border-radius: var(--radio-borde);
+  border: 1px solid var(--color-borde);
+  background-color: var(--color-fondo-alt);
+  color: var(--color-texto);
+  font-family: var(--fuente-base);
+  font-size: 0.9rem;
+  cursor: pointer;
+  text-align: left;
+}
+
+.juego-adivinanza-opciones button:hover:not(:disabled) {
+  border-color: var(--color-secundario);
+  color: var(--color-secundario);
+}
+
+.juego-adivinanza-opciones button:disabled {
+  cursor: default;
+}
+
+.juego-adivinanza-opciones button.correcta {
+  border-color: var(--color-exito);
+  background-color: rgba(74, 222, 128, 0.15);
+  color: var(--color-exito);
+  font-weight: bold;
+}
+
+.juego-adivinanza-opciones button.incorrecta {
+  border-color: var(--color-error);
+  background-color: rgba(248, 113, 113, 0.15);
+  color: var(--color-error);
+}
+
+.juego-adivinanza-siguiente {
+  display: block;
+  margin: 1.2rem auto 0;
+  padding: 0.6rem 1.4rem;
+  border: none;
+  border-radius: var(--radio-borde);
+  background-color: var(--color-primario);
+  color: var(--color-fondo);
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.juego-adivinanza-siguiente:hover {
+  background-color: var(--color-primario-hover);
+}
+
+.juego-adivinanza-final {
+  max-width: 400px;
+  margin: 2.5rem auto 0;
+  text-align: center;
+}
+
+.juego-adivinanza-puntaje {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: var(--color-primario);
+  margin-bottom: 1.2rem;
+}
+
+.juego-adivinanza-final button {
+  padding: 0.7rem 1.6rem;
+  border: none;
+  border-radius: var(--radio-borde);
+  background-color: var(--color-primario);
+  color: var(--color-fondo);
+  font-weight: bold;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.juego-adivinanza-final button:hover {
+  background-color: var(--color-primario-hover);
+}
+
+@media (max-width: 480px) {
+  .juego-adivinanza-opciones {
+    grid-template-columns: 1fr;
+  }
+}

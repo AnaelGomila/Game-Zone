@@ -4,6 +4,7 @@ import { useAuth } from '../contexto/ContextoAuth';
 import { useAlerta } from '../contexto/ContextoAlerta';
 import { obtenerJuegos } from '../servicios/servicioRawg';
 import AvatarMenu from './AvatarMenu';
+import BuscadorUsuarios from './BuscadorUsuarios';
 import './BarraSuperior.css';
 
 /*
@@ -27,8 +28,23 @@ import './BarraSuperior.css';
   Catálogo por defecto) y navega a uno elegido al azar entre esos 20.
   No hace falta un endpoint especial de RAWG para "juego aleatorio" —
   alcanza con reusar obtenerJuegos(), que ya se pedía en otras pantallas.
+
+  Responsive: se agrega un botón hamburguesa (☰), oculto en pantallas
+  anchas y visible solo por debajo del breakpoint mobile (ver
+  BarraSuperior.css) — abre la Sidebar, cuyo estado vive en App.jsx
+  (onAbrirMenu es esa función, pasada como prop).
+
+  Se agrega <BuscadorUsuarios /> (solo si hay sesión — /usuario/:id
+  requiere login igual que el resto de las rutas privadas), ubicado
+  junto al avatar dentro de .barra-superior-cuenta — un botón de texto
+  que abre un desplegable de búsqueda de usuarios por nombre/nickname,
+  sin necesitar una pantalla de resultados nueva.
+
+  El buscador de juegos ya no tiene botón de lupa aparte: con Enter en
+  el input alcanza (el <form> ya maneja el submit), así que ese botón
+  quedaba de más.
 */
-function BarraSuperior() {
+function BarraSuperior({ onAbrirMenu }) {
   const { estaLogueado } = useAuth();
   const { mostrarAlerta } = useAlerta();
   const navegar = useNavigate();
@@ -63,6 +79,15 @@ function BarraSuperior() {
 
   return (
     <header className="barra-superior">
+      <button
+        type="button"
+        className="barra-superior-menu"
+        onClick={onAbrirMenu}
+        aria-label="Abrir menú de navegación"
+      >
+        ☰
+      </button>
+
       <Link to="/" className="barra-superior-logo">
         Game Zone
       </Link>
@@ -75,9 +100,6 @@ function BarraSuperior() {
           onChange={(evento) => setTexto(evento.target.value)}
           aria-label="Buscar juegos"
         />
-        <button type="submit" aria-label="Buscar">
-          🔍
-        </button>
       </form>
 
       <button
@@ -91,7 +113,10 @@ function BarraSuperior() {
 
       <div className="barra-superior-cuenta">
         {estaLogueado ? (
-          <AvatarMenu />
+          <>
+            <BuscadorUsuarios />
+            <AvatarMenu />
+          </>
         ) : (
           <>
             <Link to="/login" className="barra-superior-link">

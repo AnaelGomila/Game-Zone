@@ -86,3 +86,22 @@ export async function actualizarTituloAdmin(id, titulo) {
     throw new Error(`Error al actualizar el título: ${error.message}`);
   }
 }
+
+// Buscador de usuarios (barra superior): busca por nombre o nickname,
+// sin distinguir mayúsculas (ilike). Funciona para cualquier usuario
+// logueado gracias a la política "Usuarios logueados ven cualquier
+// perfil" (Parte 17) — no hace falta nada nuevo en RLS. Se limita a 6
+// resultados: es un desplegable chico, no una pantalla de resultados.
+export async function buscarUsuarios(texto) {
+  const { data, error } = await supabase
+    .from('usuarios')
+    .select('id, nombre, nickname, avatar_url')
+    .or(`nombre.ilike.%${texto}%,nickname.ilike.%${texto}%`)
+    .limit(6);
+
+  if (error) {
+    throw new Error(`Error al buscar usuarios: ${error.message}`);
+  }
+
+  return data;
+}

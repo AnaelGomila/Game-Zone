@@ -9,7 +9,7 @@
   z-index: 300;
   display: flex;
   align-items: center;
-  gap: 1.2rem;
+  gap: 2.2rem;
   padding: 1rem 1.5rem;
   background-color: var(--color-fondo-alt);
   border-bottom: 2px solid var(--color-borde);
@@ -26,9 +26,24 @@
   letter-spacing: 0.02em;
 }
 
+/* Oculto en pantallas anchas — solo aparece por debajo del breakpoint
+   mobile (ver media query al final), donde la Sidebar deja de estar
+   siempre visible y hace falta un botón para abrirla. */
+.barra-superior-menu {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--color-texto);
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0.2rem 0.4rem;
+  flex-shrink: 0;
+}
+
 .barra-superior-buscador {
   flex: 1;
-  max-width: 480px;
+  max-width: 760px;
   display: flex;
   gap: 0.4rem;
 }
@@ -46,20 +61,6 @@
 .barra-superior-buscador input:focus {
   outline: 2px solid var(--color-secundario);
   border-color: var(--color-secundario);
-}
-
-.barra-superior-buscador button {
-  padding: 0.6rem 0.8rem;
-  border-radius: var(--radio-borde);
-  border: 1px solid var(--color-borde);
-  background-color: transparent;
-  color: var(--color-texto-secundario);
-  cursor: pointer;
-}
-
-.barra-superior-buscador button:hover {
-  border-color: var(--color-secundario);
-  color: var(--color-secundario);
 }
 
 /* Parte 10: botón "Sorpréndeme" — ocupa el espacio libre entre el
@@ -107,4 +108,27 @@
 
 .barra-superior-link:hover {
   text-decoration: underline;
+}
+
+/* Responsive: por debajo de este ancho, la Sidebar deja de estar
+   siempre visible (ver Sidebar.css) — acá aparece el botón hamburguesa
+   para abrirla, y el resto de los elementos de la barra se acomodan en
+   más de una fila en vez de apretarse en una sola línea. */
+@media (max-width: 768px) {
+  .barra-superior {
+    flex-wrap: wrap;
+    gap: 0.7rem;
+    padding: 0.8rem 1rem;
+  }
+
+  .barra-superior-menu {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .barra-superior-buscador {
+    order: 3;
+    flex-basis: 100%;
+    max-width: none;
+  }
 }
