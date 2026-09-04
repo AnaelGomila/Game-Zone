@@ -47,39 +47,45 @@ function Login() {
   }
 
   return (
-    <div className="formulario-auth">
-      <h1>Iniciar sesión</h1>
-      <form onSubmit={manejarEnvio} noValidate>
-        <label htmlFor="email">Email</label>
-        <input
-          id="email"
-          type="email"
-          value={email}
-          onChange={(evento) => setEmail(evento.target.value)}
-        />
-        {errores.email && <p className="formulario-auth-error">{errores.email}</p>}
+    <div className="formulario-auth-pagina">
+      <div className="formulario-auth">
+        <h1>Iniciar sesión</h1>
+        <form onSubmit={manejarEnvio} noValidate>
+          <label htmlFor="email">Email</label>
+          <input
+            id="email"
+            type="email"
+            value={email}
+            onChange={(evento) => setEmail(evento.target.value)}
+          />
+          {errores.email && <p className="formulario-auth-error">{errores.email}</p>}
 
-        <label htmlFor="contrasena">Contraseña</label>
-        <input
-          id="contrasena"
-          type="password"
-          value={contrasena}
-          onChange={(evento) => setContrasena(evento.target.value)}
-        />
-        {errores.contrasena && (
-          <p className="formulario-auth-error">{errores.contrasena}</p>
-        )}
+          <label htmlFor="contrasena">Contraseña</label>
+          <input
+            id="contrasena"
+            type="password"
+            value={contrasena}
+            onChange={(evento) => setContrasena(evento.target.value)}
+          />
+          {errores.contrasena && (
+            <p className="formulario-auth-error">{errores.contrasena}</p>
+          )}
 
-        {errorLogin && <p className="formulario-auth-error">{errorLogin}</p>}
+          {errorLogin && <p className="formulario-auth-error">{errorLogin}</p>}
 
-        <button type="submit" disabled={enviando}>
-          {enviando ? 'Ingresando...' : 'Ingresar'}
-        </button>
-      </form>
+          <button type="submit" disabled={enviando}>
+            {enviando ? 'Ingresando...' : 'Ingresar'}
+          </button>
+        </form>
 
-      <p>
-        ¿No tenés cuenta? <Link to="/registro">Registrate</Link>
-      </p>
+        <p>
+          <Link to="/recuperar-contrasena">¿Olvidaste tu contraseña?</Link>
+        </p>
+
+        <p>
+          ¿No tenés cuenta? <Link to="/registro">Registrate</Link>
+        </p>
+      </div>
     </div>
   );
 }

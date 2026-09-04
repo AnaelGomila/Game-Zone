@@ -190,7 +190,7 @@ function Catalogo() {
       )}
 
       {!cargandoComunidad && juegosComunidadAdaptados.length > 0 && (
-        <div className="catalogo-comunidad">
+        <div className="catalogo-comunidad" id="comunidad">
           <h2>Agregados por la comunidad</h2>
           <div className="catalogo-grid">
             {juegosComunidadAdaptados.map((juego) => (

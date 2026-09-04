@@ -2,6 +2,8 @@ import { Routes, Route } from 'react-router-dom';
 
 import Inicio from '../pages/Inicio';
 import Login from '../pages/Login';
+import RecuperarContrasena from '../pages/RecuperarContrasena';
+import RestablecerContrasena from '../pages/RestablecerContrasena';
 import Registro from '../pages/Registro';
 import Catalogo from '../pages/Catalogo';
 import DetalleJuego from '../pages/DetalleJuego';
@@ -39,6 +41,8 @@ function AppRouter() {
       {/* --- Rutas públicas --- */}
       <Route path="/" element={<Inicio />} />
       <Route path="/login" element={<Login />} />
+      <Route path="/recuperar-contrasena" element={<RecuperarContrasena />} />
+      <Route path="/restablecer-contrasena" element={<RestablecerContrasena />} />
       <Route path="/registro" element={<Registro />} />
       <Route path="/catalogo" element={<Catalogo />} />
 

@@ -1,6 +1,22 @@
+/* Envoltorio que centra el formulario en el medio de la pantalla (antes
+   .formulario-auth tenía "margin: 3rem auto", que solo centraba
+   horizontalmente y dejaba todo pegado arriba). Se usa en Login,
+   Registro, RecuperarContrasena y RestablecerContrasena. El alto
+   descuenta la barra superior (--alto-barra-superior, Parte 16) para
+   que el centrado sea respecto al espacio visible debajo de ella, no
+   respecto a toda la altura de la página. */
+.formulario-auth-pagina {
+  min-height: calc(100vh - var(--alto-barra-superior));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+}
+
 .formulario-auth {
+  width: 100%;
   max-width: 360px;
-  margin: 3rem auto;
+  margin: 0;
   padding: 2rem;
   background-color: var(--color-fondo-alt);
   border: 1px solid var(--color-borde);

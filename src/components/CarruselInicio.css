@@ -1,0 +1,80 @@
+.carrusel-inicio {
+  background-color: var(--color-fondo-alt);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-borde);
+  padding: 1.2rem;
+}
+
+.carrusel-inicio-encabezado {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.carrusel-inicio-encabezado h2 {
+  margin: 0;
+  color: var(--color-primario);
+  font-size: 1.2rem;
+}
+
+.carrusel-inicio-ver-mas {
+  color: var(--color-secundario);
+  text-decoration: none;
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+.carrusel-inicio-ver-mas:hover {
+  text-decoration: underline;
+}
+
+.carrusel-inicio-vacio {
+  color: var(--color-texto-secundario);
+  font-size: 0.9rem;
+}
+
+.carrusel-inicio-visor {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.carrusel-inicio-grilla {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  min-width: 0;
+}
+
+.carrusel-inicio-boton {
+  flex-shrink: 0;
+  width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 50%;
+  border: 1px solid var(--color-borde);
+  background-color: var(--color-fondo);
+  color: var(--color-texto);
+  font-size: 1.2rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.carrusel-inicio-boton:hover {
+  border-color: var(--color-secundario);
+  color: var(--color-secundario);
+}
+
+@media (max-width: 900px) {
+  .carrusel-inicio-grilla {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 560px) {
+  .carrusel-inicio-grilla {
+    grid-template-columns: 1fr;
+  }
+}

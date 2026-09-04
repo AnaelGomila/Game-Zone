@@ -59,6 +59,11 @@ export async function obtenerJuegos({ pagina = 1, busqueda = '', orden = 'popula
     juegos: datos.results,
     hayPaginaSiguiente: Boolean(datos.next),
     hayPaginaAnterior: Boolean(datos.previous),
+    // Cuántos juegos hay en total para este pedido (no solo esta
+    // página) — RAWG lo trae de una en cada respuesta, así que no hace
+    // falta ningún pedido extra. La usa Inicio.jsx para mostrar
+    // "X juegos disponibles" en los números del proyecto.
+    total: datos.count,
   };
 }
 

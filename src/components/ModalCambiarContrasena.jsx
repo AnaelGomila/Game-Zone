@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { supabase } from '../servicios/supabaseClient';
+import { useAuth } from '../contexto/ContextoAuth';
 import { useAlerta } from '../contexto/ContextoAlerta';
 import { useValidacion, requerido, longitudMinima, coincideCon } from '../hooks/useValidacion';
 import Modal from './Modal';
@@ -9,16 +10,25 @@ import './modalFormulario.css';
 /*
   ModalCambiarContrasena — nuevo en la Parte 6, usado desde Perfil.jsx.
   ------------------------------------------------------------------------
-  Supabase Auth no pide la contraseña actual para cambiarla (no hay un
-  endpoint de "reautenticar con contraseña vieja" en supabase-js): alcanza
-  con estar logueado y llamar a supabase.auth.updateUser({ password }).
-  Por eso el formulario solo pide la contraseña nueva + confirmación, no
-  la actual — es el comportamiento estándar de Supabase, no una omisión.
+  Supabase Auth no tiene un endpoint de "reautenticar con la contraseña
+  vieja" — updateUser({ password }) cambia la contraseña de cualquier
+  sesión ya logueada, sin pedir la actual (así funciona la librería, no
+  es una omisión de acá).
+
+  Para igual poder exigir la contraseña actual antes de dejar cambiarla,
+  se usa un truco simple y 100% soportado: antes de llamar a
+  updateUser(), se intenta un signInWithPassword() con el email de la
+  sesión actual y la contraseña que la persona escribió como "actual".
+  Si esas credenciales no son correctas, signInWithPassword falla y ahí
+  se corta — nunca se llega a cambiar nada. Si son correctas, recién ahí
+  se procede con updateUser() para la contraseña nueva.
 */
 function ModalCambiarContrasena({ onCerrar }) {
+  const { usuario } = useAuth();
   const { mostrarAlerta } = useAlerta();
   const { errores, validarFormulario } = useValidacion();
 
+  const [contrasenaActual, setContrasenaActual] = useState('');
   const [contrasenaNueva, setContrasenaNueva] = useState('');
   const [confirmarContrasena, setConfirmarContrasena] = useState('');
   const [enviando, setEnviando] = useState(false);
@@ -27,6 +37,10 @@ function ModalCambiarContrasena({ onCerrar }) {
     evento.preventDefault();
 
     const esValido = validarFormulario({
+      contrasenaActual: {
+        valor: contrasenaActual,
+        reglas: [requerido('Ingresá tu contraseña actual')],
+      },
       contrasenaNueva: {
         valor: contrasenaNueva,
         reglas: [requerido('Ingresá la contraseña nueva'), longitudMinima(6)],
@@ -43,6 +57,21 @@ function ModalCambiarContrasena({ onCerrar }) {
     if (!esValido) return;
 
     setEnviando(true);
+
+    // Paso 1: confirmar que la contraseña actual es correcta,
+    // "reautenticando" contra el mismo email de la sesión activa.
+    const { error: errorReautenticacion } = await supabase.auth.signInWithPassword({
+      email: usuario.email,
+      password: contrasenaActual,
+    });
+
+    if (errorReautenticacion) {
+      setEnviando(false);
+      mostrarAlerta('La contraseña actual no es correcta.', 'error');
+      return;
+    }
+
+    // Paso 2: recién acá se cambia de verdad.
     const { error } = await supabase.auth.updateUser({ password: contrasenaNueva });
     setEnviando(false);
 
@@ -58,6 +87,17 @@ function ModalCambiarContrasena({ onCerrar }) {
   return (
     <Modal titulo="Cambiar contraseña" onCerrar={onCerrar}>
       <form className="formulario-auth-modal" onSubmit={manejarEnvio} noValidate>
+        <label htmlFor="contrasenaActual">Contraseña actual</label>
+        <input
+          id="contrasenaActual"
+          type="password"
+          value={contrasenaActual}
+          onChange={(evento) => setContrasenaActual(evento.target.value)}
+        />
+        {errores.contrasenaActual && (
+          <p className="formulario-auth-error">{errores.contrasenaActual}</p>
+        )}
+
         <label htmlFor="contrasenaNueva">Contraseña nueva</label>
         <input
           id="contrasenaNueva"

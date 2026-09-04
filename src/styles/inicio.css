@@ -1,23 +1,29 @@
 .inicio {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 3rem;
+  font-family: var(--fuente-base);
+  color: var(--color-texto);
+}
+
+.inicio-portada {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 1rem;
-  min-height: 60vh;
   padding: 2rem;
   text-align: center;
-  font-family: var(--fuente-base);
-  color: var(--color-texto);
+  margin-bottom: 2rem;
 }
 
-.inicio h1 {
+.inicio-portada h1 {
   color: var(--color-primario);
   font-size: 2.2rem;
   margin: 0;
 }
 
-.inicio p {
+.inicio-portada p {
   color: var(--color-texto-secundario);
   max-width: 480px;
 }
@@ -35,4 +41,88 @@
 
 .inicio-boton:hover {
   background-color: var(--color-primario-hover);
+}
+
+/* Grilla: 2 columnas. La izquierda (2fr) tiene los dos carruseles
+   apilados uno arriba del otro (cada uno "horizontal" — ancho, no
+   alto). La derecha (1fr) es una sola columna angosta con los números
+   del proyecto, apilados verticalmente, y ocupa las DOS filas (grid-row:
+   1 / span 2) — así queda tan alta como los dos carruseles juntos. */
+.inicio-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.inicio-grid > .carrusel-inicio:nth-of-type(1) {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.inicio-grid > .carrusel-inicio:nth-of-type(2) {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+.inicio-numeros {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1.2rem;
+  background-color: var(--color-fondo-alt);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-borde);
+  padding: 1.5rem;
+}
+
+.inicio-numero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 1rem 0.5rem;
+  background-color: var(--color-fondo);
+  border-radius: var(--radio-borde);
+  text-align: center;
+}
+
+.inicio-numero-valor {
+  font-size: 2rem;
+  font-weight: bold;
+  color: var(--color-primario);
+}
+
+.inicio-numero-etiqueta {
+  font-size: 0.8rem;
+  color: var(--color-texto-secundario);
+}
+
+/* Responsive: la columna de números pasa a ser una fila horizontal
+   normal (no vertical/alta) debajo de los dos carruseles, en una sola
+   columna general. */
+@media (max-width: 860px) {
+  .inicio-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+  }
+
+  .inicio-grid > .carrusel-inicio:nth-of-type(1),
+  .inicio-grid > .carrusel-inicio:nth-of-type(2) {
+    grid-column: 1;
+  }
+
+  .inicio-numeros {
+    grid-column: 1;
+    grid-row: auto;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .inicio-numero {
+    flex: 1;
+    min-width: 140px;
+  }
 }
