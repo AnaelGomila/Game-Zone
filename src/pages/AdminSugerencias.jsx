@@ -43,7 +43,7 @@ function AdminSugerencias() {
   const [sugerencias, setSugerencias] = useState([]);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState('');
-  const [filtroEstado, setFiltroEstado] = useState('pendiente');
+  const [filtroEstado, setFiltroEstado] = useState('todas');
   const [filtroOrigen, setFiltroOrigen] = useState('todos');
   const [sugerenciaEditando, setSugerenciaEditando] = useState(null);
 

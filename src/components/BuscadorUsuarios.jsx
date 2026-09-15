@@ -3,23 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { buscarUsuarios } from '../servicios/servicioUsuarios';
 import './BuscadorUsuarios.css';
 
-// Milisegundos de espera después de la última tecla antes de buscar —
-// evita mandar un pedido por cada letra tipeada.
 const DEMORA_MS = 300;
 
-/*
-  BuscadorUsuarios — nuevo, en la barra superior.
-  ----------------------------------------------------
-  Botón de texto ("Buscar usuarios"), ubicado junto al avatar, que abre
-  un desplegable de búsqueda por nombre o nickname — no navega a
-  ninguna pantalla de resultados nueva (no existe una para usuarios, a
-  diferencia del Catálogo para juegos); los resultados aparecen ahí
-  mismo y clickear uno lleva directo a su perfil público (/usuario/:id,
-  Parte 17).
-
-  Mismo patrón de "cerrar al clickear afuera o con Escape" que ya usa
-  AvatarMenu (contenedorRef delimita qué es "adentro" del desplegable).
-*/
 function BuscadorUsuarios() {
   const [abierto, setAbierto] = useState(false);
   const [consulta, setConsulta] = useState('');
@@ -49,9 +34,6 @@ function BuscadorUsuarios() {
     };
   }, []);
 
-  // Al abrir, foco directo al input; al cerrar, se limpia todo — así la
-  // próxima vez que se abre no aparece la búsqueda anterior por un
-  // instante.
   useEffect(() => {
     if (abierto) {
       inputRef.current?.focus();

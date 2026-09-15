@@ -193,3 +193,17 @@
   color: var(--color-primario);
   font-weight: bold;
 }
+
+/* Responsive: la miniatura (80px fijos) + el texto al lado quedan muy
+   apretados por debajo de este ancho — se apilan, miniatura arriba,
+   texto abajo, en vez de competir por espacio en la misma fila. */
+@media (max-width: 420px) {
+  .tarjeta-sugerencia-cuerpo {
+    flex-direction: column;
+  }
+
+  .tarjeta-sugerencia-miniatura {
+    width: 100%;
+    height: 140px;
+  }
+}

@@ -2,23 +2,9 @@ import { useEffect, useState } from 'react';
 import TarjetaJuego from './TarjetaJuego';
 import './CarruselFavoritosPerfil.css';
 
-// Cada cuántos milisegundos avanza solo, y cuántas tarjetas se muestran
-// por página. Mismo mecanismo de "un solo setTimeout que se rearma con
-// cada cambio de página" que ya se usaba en el carrusel de favoritos
-// anterior (Parte 16) — tanto el avance automático como un clic manual
-// en ‹ › reinician el conteo por igual.
 const INTERVALO_MS = 6000;
 const POR_PAGINA = 2;
 
-/*
-  CarruselFavoritosPerfil — reemplaza a MiniCarruselFavoritos (Parte 16)
-  en la Parte 17.
-  ------------------------------------------------------------------------
-  Antes mostraba una tarjeta compacta de texto+miniatura chica, de a una.
-  Ahora reusa <TarjetaJuego> tal cual (mismo componente que usa el
-  Catálogo) y muestra 2 por página, para que no se vea tan chico. Se
-  pausa mientras el cursor está encima.
-*/
 function CarruselFavoritosPerfil({ favoritos }) {
   const totalPaginas = Math.ceil((favoritos?.length || 0) / POR_PAGINA);
   const [pagina, setPagina] = useState(0);

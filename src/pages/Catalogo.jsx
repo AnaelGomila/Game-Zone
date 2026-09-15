@@ -90,7 +90,6 @@ function Catalogo() {
         );
       })
       .finally(() => setCargando(false));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pagina, busqueda, orden, generoId]);
 
   function actualizarParametro(clave, valor) {

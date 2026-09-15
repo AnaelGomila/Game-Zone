@@ -17,7 +17,7 @@ import { supabase } from './supabaseClient';
 export async function obtenerTodosLosUsuarios() {
   const { data, error } = await supabase
     .from('usuarios')
-    .select('id, nombre, rol, titulo_admin')
+    .select('id, nombre, rol, titulo_admin, activo')
     .order('nombre', { ascending: true });
 
   if (error) {
@@ -104,4 +104,19 @@ export async function buscarUsuarios(texto) {
   }
 
   return data;
+}
+
+// Baja lógica: en vez de borrar la fila (implicaría borrar también de
+// Supabase Auth, que necesita la service_role key — no se puede hacer
+// con la clave pública desde el navegador), se apaga un flag. Un
+// usuario con activo = false no puede terminar de loguearse: ver el
+// chequeo en ContextoAuth.iniciarSesion/buscarPerfil, que lo desloguea
+// apenas detecta esto. Reforzado en la base por el trigger
+// evitar_cambio_activo_no_admin (sql/baja-logica-usuarios.sql).
+export async function cambiarEstadoActivoUsuario(id, activo) {
+  const { error } = await supabase.from('usuarios').update({ activo }).eq('id', id);
+
+  if (error) {
+    throw new Error(`Error al cambiar el estado del usuario: ${error.message}`);
+  }
 }

@@ -9,26 +9,8 @@ import {
 } from '../servicios/servicioComentarios';
 import './ComentariosJuego.css';
 
-// Tope de caracteres por comentario. Simple constante, no una regla de
-// negocio compleja — la misma idea que LARGO_MAXIMO_DESCRIPCION en
-// DetalleJuego.jsx. También está reforzado en la base (Parte 14, check
-// constraint), esto solo evita que el usuario escriba de más antes de
-// enviarlo.
 const LARGO_MAXIMO_COMENTARIO = 500;
 
-/*
-  ComentariosJuego — nuevo en la Parte 14.
-  -------------------------------------------
-  Sección de comentarios dentro de DetalleJuego, funciona igual sin
-  importar si el juego es de RAWG o local (Parte 12) — juegoId le llega
-  ya resuelto desde useParams(), y comentarios_juego.juego_id es texto,
-  así que no hace falta ninguna distinción acá.
-
-  Después de publicar un comentario, se vuelve a pedir la lista completa
-  en vez de agregar el nuevo comentario a mano al estado local — así se
-  ve el nombre_autor que completó el trigger de la base, sin duplicar esa
-  lógica en el cliente.
-*/
 function ComentariosJuego({ juegoId }) {
   const { usuario, esAdmin } = useAuth();
   const { mostrarAlerta } = useAlerta();

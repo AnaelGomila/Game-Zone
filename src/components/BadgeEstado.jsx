@@ -1,8 +1,4 @@
-/*
-  BadgeEstado — pequeño componente compartido entre MisSugerencias y
-  AdminSugerencias, para no repetir el mismo mapeo estado → texto/clase
-  en los dos lugares.
-*/
+
 const ETIQUETAS = {
   pendiente: 'Pendiente',
   aprobado: 'Aprobado',

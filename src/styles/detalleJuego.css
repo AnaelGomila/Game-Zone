@@ -305,3 +305,26 @@
   white-space: pre-line;
   margin: 0;
 }
+
+/* Responsive: la fila de ratings usa una columna fija de 110px para la
+   etiqueta (ej: "Exceptional") — en una pantalla angosta eso deja muy
+   poco lugar para la barra en sí. Se achica esa columna en vez de
+   sacarla, para no perder el alineado entre las tres filas. El hero
+   también baja un poco de alto y padding, ya que 45vh + el padding
+   normal deja menos lugar todavía para el contenido en pantallas bajas
+   (celular en horizontal, por ejemplo). */
+@media (max-width: 480px) {
+  .detalle-juego-hero {
+    min-height: 38vh;
+  }
+
+  .detalle-juego-hero-contenido {
+    padding: 1.2rem 1rem 1.5rem;
+  }
+
+  .detalle-juego-ratings-fila {
+    grid-template-columns: 78px 1fr 2.6rem;
+    gap: 0.5rem;
+    font-size: 0.78rem;
+  }
+}

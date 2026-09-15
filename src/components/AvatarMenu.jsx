@@ -4,25 +4,7 @@ import { useAuth } from '../contexto/ContextoAuth';
 import { obtenerIniciales } from '../utils/iniciales';
 import './AvatarMenu.css';
 
-/*
-  AvatarMenu — nuevo en la Parte 7, extendido en la Parte 16.
-  -------------------------------------
-  Reemplaza los links sueltos "Perfil", "Admin: Usuarios" y
-  "Admin: Sugerencias" que antes vivían en la navbar (Parte 3/6): ahora
-  están agrupados atrás de un círculo con las iniciales del usuario, en la
-  barra superior — el mismo patrón que el avatar "AG" de la esquina
-  superior derecha en la referencia de RAWG.
 
-  Parte 16: si el usuario cargó una foto de perfil (Perfil.jsx), el
-  círculo muestra esa imagen en vez de las iniciales — mismo lugar, se
-  actualiza solo apenas se guarda una foto nueva gracias a
-  ContextoAuth.refrescarPerfil().
-
-  Cierra el desplegable al hacer clic afuera (listener en `document`) o al
-  apretar Escape. No usa ningún componente de terceros para esto, es un
-  patrón manual simple: la referencia `contenedorRef` delimita "adentro"
-  del menú, cualquier clic fuera de ese nodo lo cierra.
-*/
 function AvatarMenu() {
   const { perfil, usuario, esAdmin, cerrarSesion } = useAuth();
   const navegar = useNavigate();

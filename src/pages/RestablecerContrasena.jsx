@@ -5,23 +5,6 @@ import { useValidacion, requerido, longitudMinima, coincideCon } from '../hooks/
 import { supabase } from '../servicios/supabaseClient';
 import '../styles/formularioAuth.css';
 
-/*
-  RestablecerContrasena — nuevo.
-  -----------------------------------
-  Segundo y último paso: acá llega el usuario después de clickear el
-  link que Supabase le mandó por email (RecuperarContrasena.jsx →
-  resetPasswordForEmail). Ese link ya le arma una sesión temporal de
-  recuperación por sí solo — no hace falta pedirle que inicie sesión de
-  nuevo, alcanza con pedirle la contraseña nueva y llamar a
-  updateUser(), igual que hace ModalCambiarContrasena para un usuario ya
-  logueado normalmente.
-
-  Pantalla pública (sin RutaPrivada) a propósito: si alguien entra acá
-  sin un link válido (por ejemplo, escribiendo la URL a mano), no hay
-  sesión de recuperación armada y updateUser() simplemente va a fallar
-  con un error claro — es más amable mostrar ese error acá mismo que
-  mandarlo a /login de una, cortando el flujo de golpe.
-*/
 function RestablecerContrasena() {
   const { mostrarAlerta } = useAlerta();
   const { errores, validarFormulario } = useValidacion();

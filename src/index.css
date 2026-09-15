@@ -45,3 +45,42 @@ h2 {
   font-size: 1.4rem;
   font-weight: 700;
 }
+
+/* Barra de desplazamiento con los colores del tema, en vez del gris
+   genérico del navegador — se aplica a nivel global (afecta tanto el
+   scroll de toda la página como el de cualquier contenedor con overflow
+   propio, como la Sidebar o los desplegables de AvatarMenu/
+   BuscadorUsuarios). A diferencia del bloque de arriba, esto SÍ puede
+   usar var(--color-...) sin problema: no importa si tarda un instante
+   en aplicarse, a diferencia del fondo del body no genera ningún flash
+   visible.
+
+  scrollbar-color/scrollbar-width: estándar, lo sigue Firefox y las
+  versiones nuevas de Chrome/Edge. Los ::-webkit-scrollbar-* de abajo
+  son el equivalente para Safari y versiones de Chrome/Edge que todavía
+  no soportan el estándar — hace falta poner los dos para cubrir todos
+  los navegadores.
+*/
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-primario) var(--color-fondo-alt);
+}
+
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+*::-webkit-scrollbar-track {
+  background-color: var(--color-fondo-alt);
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: var(--color-primario);
+  border-radius: 999px;
+  border: 2px solid var(--color-fondo-alt);
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-primario-hover);
+}

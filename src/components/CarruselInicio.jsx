@@ -5,19 +5,6 @@ import './CarruselInicio.css';
 
 const POR_PAGINA = 3;
 
-/*
-  CarruselInicio — nuevo.
-  ---------------------------
-  Carrusel reutilizable para las dos secciones de juegos del Inicio
-  (destacados y agregados por la comunidad) — mismo componente para las
-  dos, cambia solo qué datos y qué link "Ver más" recibe por prop. Igual
-  que el resto de los carruseles del proyecto, reusa <TarjetaJuego> tal
-  cual (mismo look que el Catálogo).
-
-  Paginación manual con ‹ › (sin avance automático, a diferencia del
-  carrusel de favoritos del Perfil) — acá alcanza con lo simple, es
-  contenido de exploración, no algo que convenga que se mueva solo.
-*/
 function CarruselInicio({ titulo, juegos, cargando, enlace, textoEnlace }) {
   const [pagina, setPagina] = useState(0);
   const totalPaginas = Math.ceil((juegos?.length || 0) / POR_PAGINA);

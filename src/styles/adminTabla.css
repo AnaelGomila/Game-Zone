@@ -32,6 +32,21 @@
   overflow: hidden;
 }
 
+/* Responsive: una tabla HTML no se "acomoda sola" a una pantalla angosta
+   como sí lo hacen las grillas con auto-fill/auto-fit del resto del
+   proyecto — con 4 columnas, en un celular se apretaba todo o
+   directamente se salía de la pantalla. En vez de cambiar la tabla por
+   otra cosa (lo que sí cambiaría cómo se ve/usa esto), se envuelve en
+   un contenedor con scroll horizontal propio: en pantallas anchas no
+   hace nada distinto (nunca llega a necesitar scroll), y en pantallas
+   angostas la tabla se puede desplazar hacia los costados sin romper
+   el resto de la página. */
+.admin-tabla-envoltorio {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
 .admin-tabla th,
 .admin-tabla td {
   text-align: left;
@@ -71,6 +86,31 @@
   cursor: not-allowed;
 }
 
+/* Dos botones ahora en la última columna (rol + estado) — un poco de
+   espacio entre ellos, en vez de quedar pegados. */
+.admin-tabla-boton-estado {
+  margin-left: 0.5rem;
+  border-color: var(--color-error) !important;
+  color: var(--color-error) !important;
+}
+
+.admin-tabla-boton-estado:hover:not(:disabled) {
+  background-color: var(--color-error) !important;
+  color: var(--color-fondo) !important;
+}
+
+.admin-tabla-estado-activo {
+  color: var(--color-exito);
+  font-size: 0.85rem;
+  font-weight: bold;
+}
+
+.admin-tabla-estado-inactivo {
+  color: var(--color-error);
+  font-size: 0.85rem;
+  font-weight: bold;
+}
+
 /* Parte 17: celda de título — input + botón "Guardar" chico, en fila. */
 .admin-tabla-titulo {
   display: flex;
@@ -92,4 +132,13 @@
 
 .admin-tabla-titulo input:focus {
   outline: 2px solid var(--color-secundario);
+}
+
+/* Por debajo de este ancho, la tabla deja de encogerse (lo que apretaría
+   demasiado el título/nombre) y en cambio el envoltorio de arriba la
+   deja desplazarse hacia el costado. */
+@media (max-width: 640px) {
+  .admin-tabla {
+    min-width: 680px;
+  }
 }

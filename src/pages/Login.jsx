@@ -37,8 +37,15 @@ function Login() {
     setEnviando(false);
 
     if (error) {
-      setErrorLogin('Email o contraseña incorrectos.');
-      mostrarAlerta('Email o contraseña incorrectos.', 'error');
+      // Si es el error de cuenta deshabilitada (baja lógica), tiene un
+      // mensaje propio y claro — para cualquier otro error (credenciales
+      // mal, o lo que sea), se muestra el genérico de siempre, sin
+      // filtrar el mensaje técnico real de Supabase.
+      const mensaje = error.deshabilitada
+        ? error.message
+        : 'Email o contraseña incorrectos.';
+      setErrorLogin(mensaje);
+      mostrarAlerta(mensaje, 'error');
       return;
     }
 

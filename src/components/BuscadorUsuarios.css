@@ -23,7 +23,7 @@
   position: absolute;
   top: calc(100% + 0.5rem);
   right: 0;
-  width: 260px;
+  width: min(260px, calc(100vw - 2rem));
   display: flex;
   flex-direction: column;
   gap: 0.5rem;

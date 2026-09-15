@@ -1,7 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '../contexto/ContextoAuth';
 import { useAlerta } from '../contexto/ContextoAlerta';
-import { obtenerTodosLosUsuarios, cambiarRolUsuario, actualizarTituloAdmin } from '../servicios/servicioUsuarios';
+import {
+  obtenerTodosLosUsuarios,
+  cambiarRolUsuario,
+  actualizarTituloAdmin,
+  cambiarEstadoActivoUsuario,
+} from '../servicios/servicioUsuarios';
 import '../styles/adminTabla.css';
 import '../styles/cargando.css';
 
@@ -25,6 +30,15 @@ import '../styles/cargando.css';
   por el trigger evitar_cambio_titulo_admin_no_admin (Parte 17), que
   revierte cualquier intento de cambiarlo desde una cuenta que no sea
   admin.
+
+  Baja lógica de usuarios (ajuste posterior): se agrega la columna
+  "Estado" con un botón para deshabilitar/habilitar — cierra el ABM de
+  usuarios (antes solo había alta y modificación, no baja). Un usuario
+  deshabilitado no puede terminar de loguearse (ver el chequeo en
+  ContextoAuth), y no se borra nada de la base — es una bandera, no un
+  DELETE, así que se puede revertir en cualquier momento. Mismo criterio
+  de protección que el botón de rol: no se puede deshabilitar la propia
+  cuenta, para no dejarse afuera del panel sin querer.
 */
 function AdminUsuarios() {
   const { usuario } = useAuth();
@@ -89,6 +103,29 @@ function AdminUsuarios() {
     }
   }
 
+  async function manejarCambiarEstado(usuarioFila) {
+    const nuevoEstado = !usuarioFila.activo;
+    setActualizandoId(usuarioFila.id);
+
+    try {
+      await cambiarEstadoActivoUsuario(usuarioFila.id, nuevoEstado);
+      setUsuarios((actuales) =>
+        actuales.map((fila) =>
+          fila.id === usuarioFila.id ? { ...fila, activo: nuevoEstado } : fila
+        )
+      );
+      mostrarAlerta(
+        `${usuarioFila.nombre} fue ${nuevoEstado ? 'habilitado' : 'deshabilitado'}.`,
+        nuevoEstado ? 'exito' : 'info'
+      );
+    } catch (error) {
+      console.error('Error al cambiar estado:', error.message);
+      mostrarAlerta('No se pudo cambiar el estado.', 'error');
+    } finally {
+      setActualizandoId(null);
+    }
+  }
+
   return (
     <div className="admin-panel">
       <h1>Admin: Usuarios</h1>
@@ -102,12 +139,14 @@ function AdminUsuarios() {
       {error && <p className="formulario-simple-error">{error}</p>}
 
       {!cargando && !error && (
+        <div className="admin-tabla-envoltorio">
         <table className="admin-tabla">
           <thead>
             <tr>
               <th>Nombre</th>
               <th>Rol</th>
               <th>Título</th>
+              <th>Estado</th>
               <th>Acción</th>
             </tr>
           </thead>
@@ -145,6 +184,15 @@ function AdminUsuarios() {
                     </div>
                   </td>
                   <td>
+                    <span
+                      className={
+                        fila.activo ? 'admin-tabla-estado-activo' : 'admin-tabla-estado-inactivo'
+                      }
+                    >
+                      {fila.activo ? 'Activo' : 'Deshabilitado'}
+                    </span>
+                  </td>
+                  <td>
                     <button
                       type="button"
                       disabled={esUsuarioActual || actualizandoId === fila.id}
@@ -157,12 +205,26 @@ function AdminUsuarios() {
                     >
                       {fila.rol === 'admin' ? 'Bajar a usuario' : 'Subir a admin'}
                     </button>
+                    <button
+                      type="button"
+                      className="admin-tabla-boton-estado"
+                      disabled={esUsuarioActual || actualizandoId === fila.id}
+                      onClick={() => manejarCambiarEstado(fila)}
+                      title={
+                        esUsuarioActual
+                          ? 'No podés deshabilitar tu propia cuenta'
+                          : undefined
+                      }
+                    >
+                      {fila.activo ? 'Deshabilitar' : 'Habilitar'}
+                    </button>
                   </td>
                 </tr>
               );
             })}
           </tbody>
         </table>
+        </div>
       )}
     </div>
   );

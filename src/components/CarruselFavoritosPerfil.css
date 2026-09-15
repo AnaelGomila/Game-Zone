@@ -16,15 +16,6 @@
   gap: 1rem;
 }
 
-/* Acá las tarjetas quedan bastante más anchas que en el Catálogo (2
-   columnas contra una grilla de auto-fill más angosta), y TarjetaJuego
-   fija su imagen en 140px de alto sin importar el ancho — con una
-   tarjeta más ancha, ese mismo alto recorta mucho más de la imagen que
-   en el Catálogo. Se sube el alto acá (sin tocar TarjetaJuego.css, que
-   se usa en todo el proyecto) y se ancla arriba (object-position: top,
-   mismo recurso que ya se usó para el hero de DetalleJuego) para que el
-   recorte se saque de abajo en vez de perder la parte de arriba de la
-   imagen. */
 .carrusel-favoritos-perfil-grilla .tarjeta-juego img {
   height: 220px;
   object-position: top;
@@ -34,9 +25,6 @@
   height: 220px;
 }
 
-/* Con una sola tarjeta en la última página (cantidad impar de favoritos),
-   que no se estire a lo ancho de las dos columnas — se ve mejor angosta,
-   del mismo tamaño que las demás. */
 .carrusel-favoritos-perfil-grilla:has(> :only-child) {
   grid-template-columns: 1fr;
   max-width: 260px;

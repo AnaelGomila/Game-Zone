@@ -4,7 +4,15 @@
   position: sticky;
   top: var(--alto-barra-superior);
   height: calc(100vh - var(--alto-barra-superior));
-  overflow-y: auto;
+  /* Antes: overflow-y: auto acá — hacía que TODO (nav + filtros)
+     scrolleara junto como un solo bloque. Ahora .sidebar es un
+     contenedor flex en columna sin scroll propio: .sidebar-nav ocupa
+     su alto natural (flex-shrink: 0, más abajo) y .sidebar-filtros se
+     queda con el espacio que sobra (flex: 1) y scrollea por su cuenta
+     — así "Inicio"/"Catálogo"/etc. quedan siempre fijos arriba, y solo
+     la lista de categorías se mueve cuando no entra. */
+  display: flex;
+  flex-direction: column;
   background-color: var(--color-fondo-alt);
   border-right: 1px solid var(--color-borde);
   padding: 1rem 0.6rem;
@@ -50,6 +58,7 @@
 }
 
 .sidebar-nav {
+  flex-shrink: 0;
   display: flex;
   flex-direction: column;
   gap: 0.2rem;
@@ -86,6 +95,16 @@
   display: flex;
   flex-direction: column;
   gap: 0.2rem;
+  /* Se queda con el espacio que sobra dentro de .sidebar (flex column)
+     y scrollea por su cuenta si la lista de géneros no entra — el nav
+     de arriba no se mueve. min-height: 0 es necesario para que un hijo
+     flex pueda encogerse por debajo de su contenido y el overflow-y
+     funcione de verdad (sin esto, un flex item por defecto no se deja
+     achicar más que su contenido, y el scroll nunca llegaría a
+     activarse). */
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
 }
 
 .sidebar-filtros-titulo {

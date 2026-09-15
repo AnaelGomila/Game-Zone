@@ -12,6 +12,14 @@
 .modal-caja {
   width: 100%;
   max-width: 420px;
+  /* Modales con muchos campos (ej: ModalEditarPerfil, con avatar +
+     portada + varios inputs) pueden ser más altos que una pantalla de
+     celular. Sin esto, la parte de abajo quedaba cortada y sin forma
+     de llegar a ella — con max-height + overflow-y, el modal en sí
+     scrollea por dentro en vez de desbordarse fuera de la pantalla. En
+     desktop no cambia nada: casi nunca llega a necesitar ese scroll. */
+  max-height: calc(100vh - 2rem);
+  overflow-y: auto;
   background-color: var(--color-fondo-alt);
   border: 1px solid var(--color-borde);
   border-radius: var(--radio-borde);

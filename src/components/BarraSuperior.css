@@ -1,8 +1,4 @@
-/*
-  Parte 10: la barra se agranda un poco (más padding vertical, logo más
-  grande) para que se note menos el espacio vacío de arriba, y se agrega
-  un borde inferior más marcado acorde al resto del rediseño.
-*/
+
 .barra-superior {
   position: sticky;
   top: 0;
@@ -26,9 +22,6 @@
   letter-spacing: 0.02em;
 }
 
-/* Oculto en pantallas anchas — solo aparece por debajo del breakpoint
-   mobile (ver media query al final), donde la Sidebar deja de estar
-   siempre visible y hace falta un botón para abrirla. */
 .barra-superior-menu {
   display: none;
   background: none;
@@ -63,11 +56,6 @@
   border-color: var(--color-secundario);
 }
 
-/* Parte 10: botón "Sorpréndeme" — ocupa el espacio libre entre el
-   buscador y la cuenta con una utilidad real (elegir un juego al azar),
-   en vez de agrandar el buscador de forma artificial. Se usa el color
-   primario (naranja) relleno, como un CTA, ya que es la acción más
-   "jugable" de la barra. */
 .barra-superior-al-azar {
   flex-shrink: 0;
   padding: 0.6rem 1rem;
@@ -110,10 +98,6 @@
   text-decoration: underline;
 }
 
-/* Responsive: por debajo de este ancho, la Sidebar deja de estar
-   siempre visible (ver Sidebar.css) — acá aparece el botón hamburguesa
-   para abrirla, y el resto de los elementos de la barra se acomodan en
-   más de una fila en vez de apretarse en una sola línea. */
 @media (max-width: 768px) {
   .barra-superior {
     flex-wrap: wrap;

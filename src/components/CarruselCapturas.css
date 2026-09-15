@@ -47,3 +47,15 @@
   font-size: 0.8rem;
   color: var(--color-texto-secundario);
 }
+
+@media (max-width: 420px) {
+  .carrusel-capturas-boton {
+    width: 1.8rem;
+    height: 1.8rem;
+    font-size: 1.1rem;
+  }
+
+  .carrusel-capturas-visor img {
+    max-height: 220px;
+  }
+}
