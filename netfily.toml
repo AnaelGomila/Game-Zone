@@ -1,0 +1,14 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# La app es una SPA con React Router: todas las rutas (/catalogo, /juego/123,
+# etc.) tienen que devolver index.html y dejar que el router decida.
+# Sin esto, entrar directo a una URL o recargar da 404 en Netlify.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
