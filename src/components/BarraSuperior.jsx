@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexto/ContextoAuth';
 import { useAlerta } from '../contexto/ContextoAlerta';
@@ -13,6 +13,25 @@ function BarraSuperior({ onAbrirMenu }) {
   const navegar = useNavigate();
   const [texto, setTexto] = useState('');
   const [buscandoAlAzar, setBuscandoAlAzar] = useState(false);
+  const barraRef = useRef(null);
+
+  useEffect(() => {
+    const barra = barraRef.current;
+    if (!barra) return;
+
+    function publicarAlto() {
+      document.documentElement.style.setProperty(
+        '--alto-barra-superior',
+        `${barra.offsetHeight}px`
+      );
+    }
+
+    publicarAlto();
+    const observador = new ResizeObserver(publicarAlto);
+    observador.observe(barra);
+
+    return () => observador.disconnect();
+  }, []);
 
   function manejarEnvio(evento) {
     evento.preventDefault();
@@ -41,7 +60,7 @@ function BarraSuperior({ onAbrirMenu }) {
   }
 
   return (
-    <header className="barra-superior">
+    <header className="barra-superior" ref={barraRef}>
       <button
         type="button"
         className="barra-superior-menu"
