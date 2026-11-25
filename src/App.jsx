@@ -4,16 +4,17 @@ import { ProveedorAuth } from './contexto/ContextoAuth';
 import { ProveedorAlerta } from './contexto/ContextoAlerta';
 import BarraSuperior from './components/BarraSuperior';
 import Sidebar from './components/Sidebar';
+import ScrollAlInicio from './components/ScrollAlInicio';
 import Pie from './components/Pie';
 import AppRouter from './router/AppRouter';
 import './styles/layout.css';
-
 
 function App() {
   const [menuAbierto, setMenuAbierto] = useState(false);
 
   return (
     <BrowserRouter>
+      <ScrollAlInicio />
       <ProveedorAuth>
         <ProveedorAlerta>
           <div className="layout-app">
